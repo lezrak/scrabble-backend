@@ -18,6 +18,10 @@ public class Game extends BaseEntity {
 
     private int nextPlayer = -1;
 
+
+    @Column(name = "gameName", unique = true, nullable = false,length = 60)
+    private String name;
+
     public Game() {
     }
 
@@ -53,6 +57,10 @@ public class Game extends BaseEntity {
             }
         }
         return false;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 
