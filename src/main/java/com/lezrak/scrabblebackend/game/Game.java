@@ -4,28 +4,22 @@ package com.lezrak.scrabblebackend.game;
 import com.lezrak.scrabblebackend.common.BaseEntity;
 import com.lezrak.scrabblebackend.player.Player;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name = "games")
 public class Game extends BaseEntity {
 
-    @ManyToMany(mappedBy = "games")
-    private Set<Player> players = new HashSet<>();
 
-    private ArrayList<Integer> totalPoints = new ArrayList<>();
-
-    private ArrayList<Integer> lastMovePoints = new ArrayList<>();
-
-    private ArrayList<ArrayList<Character>> characters = new ArrayList<>();
+    private LinkedHashSet<PlayerState> players = new LinkedHashSet<>();
 
     private HashMap<String, Character> boardState = new HashMap<>();
 
     private int nextPlayer = -1;
+
+
+
 
     public boolean startGame() {
         if (nextPlayer < 0) {
@@ -36,10 +30,50 @@ public class Game extends BaseEntity {
         }
     }
 
-    public boolean makeMove(int id, HashMap<String,Character> move){
+    public boolean makeMove(long playerId, HashMap<String,Character> move){
         //TODO : Add getting move evaluation from AI server
         nextPlayer = (nextPlayer+1)%players.size();
         return true;
+    }
+
+    public boolean addPlayer(Player player){
+        if(players.size()<4){
+            players.add(new PlayerState(player));
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean removePlayer(Player player){
+        for(PlayerState p : players){
+            if(p.player.equals(player)){
+                players.remove(p);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    private class PlayerState{
+
+
+        @ManyToOne
+        private Player player;
+
+        private int totalPoints=0;
+
+        private int lastMovePoints=0;
+
+        private ArrayList<Character> characters = new ArrayList<>();
+
+        PlayerState(Player player){
+            this.player = player;
+
+        }
     }
 
 
