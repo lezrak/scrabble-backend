@@ -18,8 +18,8 @@ public class Game extends BaseEntity {
 
     private int nextPlayer = -1;
 
-
-
+    public Game() {
+    }
 
     public boolean startGame() {
         if (nextPlayer < 0) {
@@ -30,25 +30,24 @@ public class Game extends BaseEntity {
         }
     }
 
-    public boolean makeMove(long playerId, HashMap<String,Character> move){
+    public boolean makeMove(long playerId, HashMap<String, Character> move) {
         //TODO : Add getting move evaluation from AI server
-        nextPlayer = (nextPlayer+1)%players.size();
+        nextPlayer = (nextPlayer + 1) % players.size();
         return true;
     }
 
-    public boolean addPlayer(Player player){
-        if(players.size()<4){
+    public boolean addPlayer(Player player) {
+        if (players.size() < 4) {
             players.add(new PlayerState(player));
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    public boolean removePlayer(Player player){
-        for(PlayerState p : players){
-            if(p.player.equals(player)){
+    public boolean removePlayer(Player player) {
+        for (PlayerState p : players) {
+            if (p.player.equals(player)) {
                 players.remove(p);
                 return true;
             }
@@ -57,24 +56,25 @@ public class Game extends BaseEntity {
     }
 
 
-
-    private class PlayerState{
+    private class PlayerState {
 
 
         @ManyToOne
         private Player player;
 
-        private int totalPoints=0;
+        private int totalPoints = 0;
 
-        private int lastMovePoints=0;
+        private int lastMovePoints = 0;
 
         private ArrayList<Character> characters = new ArrayList<>();
 
-        PlayerState(Player player){
+        PlayerState(Player player) {
             this.player = player;
 
         }
     }
+
+
 
 
 }
