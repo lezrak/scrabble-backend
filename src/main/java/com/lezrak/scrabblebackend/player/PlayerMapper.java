@@ -14,4 +14,5 @@ public class PlayerMapper {
                 .map(PlayerMapper::toPlayerDTO)
                 .collect(Collectors.toList());
     }
+
 }
