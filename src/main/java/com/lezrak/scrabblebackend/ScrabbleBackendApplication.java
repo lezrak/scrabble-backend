@@ -1,5 +1,6 @@
 package com.lezrak.scrabblebackend;
 
+import com.lezrak.scrabblebackend.player.Player;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
