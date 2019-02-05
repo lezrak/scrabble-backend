@@ -15,6 +15,9 @@ public class PlayerDTO {
         this.nickname = nickname;
     }
 
+    public PlayerDTO() {
+    }
+
     public String getEmail() {
         return email;
     }
