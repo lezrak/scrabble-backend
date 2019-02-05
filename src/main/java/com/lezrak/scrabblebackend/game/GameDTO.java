@@ -37,8 +37,11 @@ public class GameDTO {
 
         private ArrayList<Character> characters = new ArrayList<>();
 
-        PlayerStateDTO(PlayerDTO player) {
+        PlayerStateDTO(PlayerDTO player, int totalPoints, int lastMovePoints, ArrayList<Character> characters) {
             this.player = player;
+            this.characters = characters;
+            this.totalPoints = totalPoints;
+            this.lastMovePoints = lastMovePoints;
 
         }
     }
