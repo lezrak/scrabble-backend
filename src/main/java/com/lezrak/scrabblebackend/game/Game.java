@@ -34,7 +34,7 @@ public class Game extends BaseEntity {
         }
     }
 
-    public boolean makeMove(long playerId, HashMap<String, Character> move) {
+    public boolean makeMove(Long playerId, HashMap<String, Character> move) {
         //TODO : Add getting move evaluation from AI server
         nextPlayer = (nextPlayer + 1) % players.size();
         return true;

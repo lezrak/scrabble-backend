@@ -9,7 +9,7 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String uuid = UUID.randomUUID().toString();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -37,7 +37,7 @@ public class BaseEntity {
         return that.hashCode() == this.hashCode();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
