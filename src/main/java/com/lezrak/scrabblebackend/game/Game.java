@@ -19,7 +19,7 @@ public class Game extends BaseEntity {
     private int nextPlayer = -1;
 
 
-    @Column(name = "gameName", unique = true, nullable = false,length = 60)
+    @Column(name = "gameName", unique = true, nullable = false, length = 60)
     private String name;
 
     public Game() {
@@ -59,12 +59,28 @@ public class Game extends BaseEntity {
         return false;
     }
 
+
+    public LinkedHashSet<PlayerState> getPlayers() {
+        return players;
+    }
+
+    public HashMap<String, Character> getBoardState() {
+        return boardState;
+    }
+
+    public int getNextPlayer() {
+        return nextPlayer;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
 
-    private class PlayerState {
+    public static class PlayerState {
 
 
         @ManyToOne
@@ -80,9 +96,23 @@ public class Game extends BaseEntity {
             this.player = player;
 
         }
+
+        public Player getPlayer() {
+            return player;
+        }
+
+        public int getTotalPoints() {
+            return totalPoints;
+        }
+
+        public int getLastMovePoints() {
+            return lastMovePoints;
+        }
+
+        public ArrayList<Character> getCharacters() {
+            return characters;
+        }
     }
-
-
 
 
 }

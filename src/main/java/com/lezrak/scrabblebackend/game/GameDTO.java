@@ -19,14 +19,14 @@ public class GameDTO {
     public GameDTO() {
     }
 
-    public GameDTO(LinkedHashSet<PlayerStateDTO> players, HashMap<String, Character> boardState, int nextPlayer, String name) {
+    GameDTO(LinkedHashSet<PlayerStateDTO> players, HashMap<String, Character> boardState, int nextPlayer, String name) {
         this.players = players;
         this.boardState = boardState;
         this.nextPlayer = nextPlayer;
         this.name = name;
     }
 
-    private class PlayerStateDTO {
+    static class PlayerStateDTO {
 
 
         private PlayerDTO player;
