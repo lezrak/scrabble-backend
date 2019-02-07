@@ -30,7 +30,8 @@ public class Game extends BaseEntity {
 
     public Game() {
     }
-    public Game(String name){
+
+    public Game(String name) {
         this.name = name;
     }
 
@@ -43,8 +44,8 @@ public class Game extends BaseEntity {
         }
     }
 
+    //TODO : Add getting move evaluation from AI server
     public boolean makeMove(Long playerId, HashMap<String, Character> move) {
-        //TODO : Add getting move evaluation from AI server
         nextPlayer = (nextPlayer + 1) % players.size();
         return true;
     }
@@ -67,7 +68,6 @@ public class Game extends BaseEntity {
         }
         return false;
     }
-
 
     public LinkedHashSet<PlayerState> getPlayers() {
         return players;

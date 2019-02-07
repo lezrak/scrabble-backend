@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> findAll();
+
     Game findByName(String name);
 
     List<Game> findByStartedFalse();
 
-    List<Game> findAllByNextPlayer(int nextPlayer);
 }
