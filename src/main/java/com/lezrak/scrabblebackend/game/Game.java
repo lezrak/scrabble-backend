@@ -5,7 +5,12 @@ import com.lezrak.scrabblebackend.common.BaseEntity;
 import com.lezrak.scrabblebackend.player.Player;
 
 import javax.persistence.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "games")
@@ -70,10 +75,6 @@ public class Game extends BaseEntity {
 
     public int getNextPlayer() {
         return nextPlayer;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getName() {
