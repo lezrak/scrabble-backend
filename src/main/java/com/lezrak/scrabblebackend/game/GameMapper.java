@@ -3,6 +3,7 @@ package com.lezrak.scrabblebackend.game;
 import com.lezrak.scrabblebackend.player.PlayerMapper;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GameMapper {
@@ -11,6 +12,12 @@ public class GameMapper {
 
         return new GameDTO(PlayerStateMapper.toPlayerStateDTO(game.getPlayers()),
                 game.getBoardState(), game.getNextPlayer(), game.getName());
+    }
+
+    public static List<GameDTO> toGameDTO(List<Game> gameList){
+        return gameList.stream()
+                .map(GameMapper::toGameDTO)
+                .collect(Collectors.toList());
     }
 
     private static class PlayerStateMapper {

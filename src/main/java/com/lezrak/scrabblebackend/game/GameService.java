@@ -1,11 +1,14 @@
 package com.lezrak.scrabblebackend.game;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface GameService {
     List<GameDTO> findAllByStartedFalse();
-    GameDTO makeMove(String playerID, Map<String,Character> move);
-    GameDTO startGame();
-    GameDTO findByName(String name);
+    GameDTO makeMove(String gameName, Long playerId, HashMap<String, Character> move);
+    GameDTO startGame(String gameName);
+    GameDTO findByName(String gameName);
+    GameDTO addGame (Long playerId);
+    GameDTO addPlayer (Long playerId, String gameName);
 }

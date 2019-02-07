@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class PlayerMapper {
 
     public static PlayerDTO toPlayerDTO(Player player){
-        return new PlayerDTO(player.getEmail(),player.getNickname());
+        return new PlayerDTO(player.getEmail(),player.getNickname(),player.getId());
     }
 
     public static List<PlayerDTO> toPlayerDTO(List<Player> list){

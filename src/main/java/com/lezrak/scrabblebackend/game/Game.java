@@ -23,19 +23,23 @@ public class Game extends BaseEntity {
 
     private int nextPlayer = -1;
 
+    private boolean started = false;
 
     @Column(name = "gameName", unique = true, nullable = false, length = 60)
     private String name;
 
     public Game() {
     }
+    public Game(String name){
+        this.name = name;
+    }
 
     public boolean startGame() {
-        if (nextPlayer < 0) {
+        if (started) {
             return false;
         } else {
             nextPlayer = new Random().nextInt(players.size() + 1);
-            return true;
+            return started = true;
         }
     }
 

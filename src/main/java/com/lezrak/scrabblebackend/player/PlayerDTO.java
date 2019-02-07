@@ -5,14 +5,17 @@ public class PlayerDTO {
     private String email;
     private String nickname;
     private String password;
+    private Long id;
 
-    public PlayerDTO(String email, String nickname) {
+    public PlayerDTO(String email, String nickname, Long id) {
         this.email = email;
         this.nickname = nickname;
+        this.id = id;
     }
 
-    public PlayerDTO(String nickname) {
+    public PlayerDTO(String nickname, Long id) {
         this.nickname = nickname;
+        this.id = id;
     }
 
     public PlayerDTO() {
@@ -40,5 +43,13 @@ public class PlayerDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
