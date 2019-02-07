@@ -51,7 +51,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public GameDTO addPlayer(Long playerId, String gameName) {
         Game game = gameRepository.findByName(gameName);
-        game.addPlayer(playerRepository.);
+        game.addPlayer(playerRepository.findPlayerById(playerId));
         return GameMapper.toGameDTO(gameRepository.save(game));
     }
 }
