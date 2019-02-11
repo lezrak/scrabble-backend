@@ -2,11 +2,12 @@ package com.lezrak.scrabblebackend.game;
 
 import com.lezrak.scrabblebackend.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@Service
 public class GameServiceImpl implements GameService {
 
     private GameRepository gameRepository;

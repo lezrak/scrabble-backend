@@ -4,13 +4,14 @@ package com.lezrak.scrabblebackend.game;
 import com.lezrak.scrabblebackend.common.BaseEntity;
 import com.lezrak.scrabblebackend.player.Player;
 
-import javax.persistence.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Random;
 
 @Entity
 @Table(name = "games")
