@@ -1,5 +1,6 @@
 package com.lezrak.scrabblebackend.game;
 
+import com.lezrak.scrabblebackend.gameName.GameNameService;
 import com.lezrak.scrabblebackend.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,13 @@ public class GameServiceImpl implements GameService {
 
     private GameRepository gameRepository;
     private PlayerRepository playerRepository;
+    private GameNameService gameNameService;
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository) {
+    public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository, GameNameService gameNameService) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
+        this.gameNameService = gameNameService;
     }
 
     @Override
@@ -30,14 +33,15 @@ public class GameServiceImpl implements GameService {
     }
 
 
+    //TODO : exception throwing for addPlayer, remmovePlayer, makeMove, startGame and addGame
+
     @Override
     public GameDTO addGame(Long playerId) {
-        //TODO : random name builder
-        return null;
+        Game game = new Game(gameNameService.generateName());
+        game.addPlayer(playerRepository.findPlayerById(playerId));
+        return GameMapper.toGameDTO(gameRepository.save(game));
     }
 
-
-    //TODO : exception throwing for addPlayer, remmovePlayer, makeMove and startGame
 
     @Override
     public GameDTO addPlayer(Long playerId, String gameName) {
