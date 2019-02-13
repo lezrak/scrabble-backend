@@ -1,5 +1,6 @@
 package com.lezrak.scrabblebackend.player;
 
+import com.lezrak.scrabblebackend.common.NicknameInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
