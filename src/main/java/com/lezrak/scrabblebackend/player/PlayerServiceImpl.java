@@ -20,22 +20,22 @@ public class PlayerServiceImpl implements PlayerService {
         return playerRepository.findPlayerByNickname(nickname).getPassword().equals(password);
     }
 
-    //TODO : does empty email come as null or emptyString? Adjust method
+
     @Override
     public PlayerDTO addPlayer(PlayerDTO playerDTO) {
-
-        if (playerDTO.getEmail() != null) {
-            if (!nicknameIsUsed(playerDTO.getNickname()) && !emailIsUsed(playerDTO.getEmail())) {
-                return PlayerMapper.toPlayerDTO(playerRepository.save(
-                        new Player(playerDTO.getEmail(), playerDTO.getNickname(), playerDTO.getPassword())));
-            }
-        } else if (!nicknameIsUsed(playerDTO.getNickname())) {
-            return PlayerMapper.toPlayerDTO(playerRepository.save(
-                    new Player(playerDTO.getNickname(), playerDTO.getPassword())));
+        if (nicknameIsUsed(playerDTO.getNickname())) {
+            throw new NicknameInUseException(playerDTO.getNickname());
         }
-
-
-        return null;
+        Player player = new Player(playerDTO.getNickname());
+        if (playerDTO.getEmail().length() > 0) {
+            if (emailIsUsed(playerDTO.getEmail())) {
+                throw new EmailInUseException(playerDTO.getEmail());
+            }
+            player.setEmail(playerDTO.getEmail());
+        }
+        if (playerDTO.getPassword().length() > 0)
+            player.setPassword(playerDTO.getPassword());
+        return PlayerMapper.toPlayerDTO(playerRepository.save(player));
     }
 
 
