@@ -1,18 +1,27 @@
 package com.lezrak.scrabblebackend.player;
 
 import com.lezrak.scrabblebackend.common.BaseEntity;
+import com.lezrak.scrabblebackend.game.Game;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "players")
-public class Player extends BaseEntity {
+public class Player extends BaseEntity implements Serializable {
 
     private String email;
     private String nickname;
     private String password;
     private boolean isEnabled = false;
+
+    @ManyToMany
+    private Set<Game> games = new HashSet<>();
 
     public Player(String email, String nickname, String password) {
         this.email = email;
@@ -32,6 +41,17 @@ public class Player extends BaseEntity {
     }
 
     public Player() {
+    }
+
+    public boolean addGame(Game game){
+        return this.games.add(game);
+    }
+    public boolean removeGame(Game game){
+        return this.games.remove(game);
+    }
+
+    public ArrayList<Game> getGames(){
+        return new ArrayList<>(games);
     }
 
     public void enable() {

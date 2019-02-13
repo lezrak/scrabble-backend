@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -15,7 +16,7 @@ import java.util.Random;
 
 @Entity
 @Table(name = "games")
-public class Game extends BaseEntity {
+public class Game extends BaseEntity implements Serializable {
 
 
     private LinkedHashSet<PlayerState> players = new LinkedHashSet<>();
@@ -54,6 +55,7 @@ public class Game extends BaseEntity {
     public boolean addPlayer(Player player) {
         if (players.size() < 4) {
             players.add(new PlayerState(player));
+            player.addGame(this);
             return true;
         } else {
             return false;
@@ -64,6 +66,7 @@ public class Game extends BaseEntity {
         for (PlayerState p : players) {
             if (p.player.equals(player)) {
                 players.remove(p);
+                player.removeGame(this);
                 return true;
             }
         }
@@ -86,7 +89,7 @@ public class Game extends BaseEntity {
         return name;
     }
 
-    public static class PlayerState {
+    public static class PlayerState implements Serializable {
 
 
         @ManyToOne

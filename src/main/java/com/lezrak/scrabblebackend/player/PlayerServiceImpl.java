@@ -1,8 +1,13 @@
 package com.lezrak.scrabblebackend.player;
 
+import com.lezrak.scrabblebackend.common.EmailInUseException;
 import com.lezrak.scrabblebackend.common.NicknameInUseException;
+import com.lezrak.scrabblebackend.game.GameDTO;
+import com.lezrak.scrabblebackend.game.GameMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -39,6 +44,10 @@ public class PlayerServiceImpl implements PlayerService {
         return PlayerMapper.toPlayerDTO(playerRepository.save(player));
     }
 
+    @Override
+    public List<GameDTO> getGames(Long id) {
+        return GameMapper.toGameDTO(playerRepository.findPlayerById(id).getGames());
+    }
 
     @Override
     public boolean nicknameIsUsed(String nickname) {
