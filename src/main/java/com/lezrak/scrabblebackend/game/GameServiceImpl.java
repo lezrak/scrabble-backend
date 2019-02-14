@@ -47,12 +47,14 @@ public class GameServiceImpl implements GameService {
     public GameDTO addPlayer(Long playerId, String gameName) {
         Game game = gameRepository.findByName(gameName);
         game.addPlayer(playerRepository.findPlayerById(playerId));
+        playerRepository.save(playerRepository.findPlayerById(playerId).addGame(game));
         return GameMapper.toGameDTO(gameRepository.save(game));
     }
 
     @Override
     public void removePlayer(Long playerId, String gameName) {
-        gameRepository.findByName(gameName).removePlayer(playerRepository.findPlayerById(playerId));
+        gameRepository.save(gameRepository.findByName(gameName).removePlayer(playerRepository.findPlayerById(playerId)));
+        playerRepository.save(playerRepository.findPlayerById(playerId).addGame(gameRepository.findByName(gameName)));
     }
 
     @Override

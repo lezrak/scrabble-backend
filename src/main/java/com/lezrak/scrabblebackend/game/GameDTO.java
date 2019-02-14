@@ -13,7 +13,6 @@ public class GameDTO {
 
     private int nextPlayer = -1;
 
-
     private String name;
 
     public GameDTO() {
@@ -24,6 +23,36 @@ public class GameDTO {
         this.boardState = boardState;
         this.nextPlayer = nextPlayer;
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameDTO that = (GameDTO) o;
+        return this.name.equals(that.getName())
+                && this.nextPlayer == that.getNextPlayer()
+                && this.boardState.equals(that.getBoardState())
+                && this.players.containsAll(that.getPlayers());
+    }
+
+    public LinkedHashSet<PlayerStateDTO> getPlayers() {
+        return players;
+    }
+
+
+    public HashMap<String, Character> getBoardState() {
+        return boardState;
+    }
+
+
+    public int getNextPlayer() {
+        return nextPlayer;
+    }
+
+
+    public String getName() {
+        return name;
     }
 
     static class PlayerStateDTO {
@@ -44,37 +73,25 @@ public class GameDTO {
             this.lastMovePoints = lastMovePoints;
 
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            GameDTO.PlayerStateDTO that = (GameDTO.PlayerStateDTO) o;
+            return this.player.equals(that.player)
+                    && this.characters.equals(that.characters)
+                    && this.totalPoints == (that.totalPoints)
+                    && this.lastMovePoints == (that.lastMovePoints);
+        }
+
+        @Override
+        public int hashCode() {
+            return (int) totalPoints * lastMovePoints * characters.hashCode();
+        }
+
+
     }
 
-    public LinkedHashSet<PlayerStateDTO> getPlayers() {
-        return players;
-    }
 
-    public void setPlayers(LinkedHashSet<PlayerStateDTO> players) {
-        this.players = players;
-    }
-
-    public HashMap<String, Character> getBoardState() {
-        return boardState;
-    }
-
-    public void setBoardState(HashMap<String, Character> boardState) {
-        this.boardState = boardState;
-    }
-
-    public int getNextPlayer() {
-        return nextPlayer;
-    }
-
-    public void setNextPlayer(int nextPlayer) {
-        this.nextPlayer = nextPlayer;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

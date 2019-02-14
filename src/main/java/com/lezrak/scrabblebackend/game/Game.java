@@ -4,22 +4,16 @@ package com.lezrak.scrabblebackend.game;
 import com.lezrak.scrabblebackend.common.BaseEntity;
 import com.lezrak.scrabblebackend.player.Player;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Random;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "games")
-public class Game extends BaseEntity implements Serializable {
+public class Game extends BaseEntity {
 
 
-    private LinkedHashSet<PlayerState> players = new LinkedHashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<PlayerState> players = new LinkedHashSet<>();
 
     private HashMap<String, Character> boardState = new HashMap<>();
 
@@ -37,7 +31,7 @@ public class Game extends BaseEntity implements Serializable {
         this.name = name;
     }
 
-    public boolean startGame() {
+    boolean startGame() {
         if (started) {
             return false;
         } else {
@@ -55,26 +49,24 @@ public class Game extends BaseEntity implements Serializable {
     public boolean addPlayer(Player player) {
         if (players.size() < 4) {
             players.add(new PlayerState(player));
-            player.addGame(this);
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean removePlayer(Player player) {
+    public Game removePlayer(Player player) {
         for (PlayerState p : players) {
-            if (p.player.equals(player)) {
+            if (p.getPlayer().equals(player)) {
                 players.remove(p);
-                player.removeGame(this);
-                return true;
+                return this;
             }
         }
-        return false;
+        return null;
     }
 
     public LinkedHashSet<PlayerState> getPlayers() {
-        return players;
+        return new LinkedHashSet<>(players);
     }
 
     public HashMap<String, Character> getBoardState() {
@@ -87,40 +79,6 @@ public class Game extends BaseEntity implements Serializable {
 
     public String getName() {
         return name;
-    }
-
-    public static class PlayerState implements Serializable {
-
-
-        @ManyToOne
-        private Player player;
-
-        private int totalPoints = 0;
-
-        private int lastMovePoints = 0;
-
-        private ArrayList<Character> characters = new ArrayList<>();
-
-        PlayerState(Player player) {
-            this.player = player;
-
-        }
-
-        public Player getPlayer() {
-            return player;
-        }
-
-        public int getTotalPoints() {
-            return totalPoints;
-        }
-
-        public int getLastMovePoints() {
-            return lastMovePoints;
-        }
-
-        public ArrayList<Character> getCharacters() {
-            return characters;
-        }
     }
 
 

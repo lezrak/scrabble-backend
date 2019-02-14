@@ -16,6 +16,9 @@ public class GameName {
     @Column(unique = true, nullable = false, updatable = false, length = 55)
     private String name;
 
+    public GameName() {
+    }
+
     public GameName(String name) {
         this.id = counter;
         this.name = name;
@@ -23,12 +26,6 @@ public class GameName {
     }
 
 
-    public GameName() {
-    }
-
-    public int getId() {
-        return id;
-    }
 
     public String getName() {
         return name;

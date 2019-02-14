@@ -2,40 +2,30 @@ package com.lezrak.scrabblebackend.player;
 
 public class PlayerDTO {
 
-    private String email;
-    private String nickname;
-    private String password;
+    private String email = "";
+    private String nickname = "";
+    private String password = "";
     private Long id;
 
-    public PlayerDTO(String email, String nickname, Long id) {
-        this.email = email;
-        this.nickname = nickname;
-        this.id = id;
-    }
-
-    public PlayerDTO(String nickname, Long id) {
-        this.nickname = nickname;
-        this.id = id;
-    }
-
     public PlayerDTO() {
+    }
+
+
+    public PlayerDTO(String email, String nickname, Long id) {
+        this.nickname = nickname;
+        this.email = email;
+        this.id = id;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getNickname() {
         return nickname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
 
     public String getPassword() {
         return password;
@@ -49,7 +39,16 @@ public class PlayerDTO {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerDTO that = (PlayerDTO) o;
+        return this.email.equals(that.email)
+                && this.nickname.equals(that.nickname)
+                && this.password.equals(that.password)
+                && this.id.equals(that.id);
     }
+
 }

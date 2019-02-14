@@ -1,8 +1,5 @@
 package com.lezrak.scrabblebackend.game;
 
-import com.lezrak.scrabblebackend.player.PlayerMapper;
-
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,26 +11,11 @@ public class GameMapper {
                 game.getBoardState(), game.getNextPlayer(), game.getName());
     }
 
-    public static List<GameDTO> toGameDTO(List<Game> gameList){
+    public static List<GameDTO> toGameDTO(List<Game> gameList) {
         return gameList.stream()
                 .map(GameMapper::toGameDTO)
                 .collect(Collectors.toList());
     }
 
-    private static class PlayerStateMapper {
-
-        static GameDTO.PlayerStateDTO toPlayerStateDTO(Game.PlayerState playerState) {
-            return new GameDTO.PlayerStateDTO(PlayerMapper.toPlayerDTO(playerState.getPlayer()), playerState.getTotalPoints(),
-                    playerState.getLastMovePoints(), playerState.getCharacters());
-        }
-
-        static LinkedHashSet<GameDTO.PlayerStateDTO> toPlayerStateDTO(LinkedHashSet<Game.PlayerState> playerStateSet) {
-            return playerStateSet.stream()
-                    .map(PlayerStateMapper::toPlayerStateDTO)
-                    .collect(Collectors.toCollection(LinkedHashSet::new));
-
-        }
-
-    }
 
 }
