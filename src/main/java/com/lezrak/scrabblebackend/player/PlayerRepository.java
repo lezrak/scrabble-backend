@@ -8,13 +8,15 @@ import java.util.List;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
+
     List<Player> findAll();
 
-    Player findPlayerByNickname(String nickname);
+    boolean existsPlayerByEmailAndNicknameAndPassword(String nickname, String email, String password);
 
     Player findPlayerById(Long id);
 
     boolean existsPlayerByNickname(String nickname);
+
     boolean existsPlayerByEmail(String email);
 
 }

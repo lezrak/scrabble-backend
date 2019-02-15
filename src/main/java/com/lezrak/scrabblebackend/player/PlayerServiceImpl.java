@@ -19,16 +19,14 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public boolean checkCredentials(String nickname, String password) {
-        if (!nicknameIsUsed(nickname)) {
-            return false;
-        }
-        return playerRepository.findPlayerByNickname(nickname).getPassword().equals(password);
+    public boolean checkCredentials(PlayerDTO playerDTO) {
+        return playerRepository.existsPlayerByEmailAndNicknameAndPassword(
+                playerDTO.getEmail(), playerDTO.getNickname(), playerDTO.getPassword());
     }
 
 
     @Override
-    public PlayerDTO addPlayer(PlayerDTO playerDTO) {
+    public PlayerDTO postPlayer(PlayerDTO playerDTO) {
         if (nicknameIsUsed(playerDTO.getNickname())) {
             throw new NicknameInUseException(playerDTO.getNickname());
         }

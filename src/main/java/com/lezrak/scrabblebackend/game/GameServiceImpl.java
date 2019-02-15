@@ -33,10 +33,10 @@ public class GameServiceImpl implements GameService {
     }
 
 
-    //TODO : exception throwing for addPlayer, remmovePlayer, makeMove, startGame and addGame
+    //TODO : exception throwing for postPlayer, remmovePlayer, makeMove, startGame and createGame
 
     @Override
-    public GameDTO addGame(Long playerId) {
+    public GameDTO createGame(Long playerId) {
         Game game = new Game(gameNameService.generateName());
         game.addPlayer(playerRepository.findPlayerById(playerId));
         return GameMapper.toGameDTO(gameRepository.save(game));
