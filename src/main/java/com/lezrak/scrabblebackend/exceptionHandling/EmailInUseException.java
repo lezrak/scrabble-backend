@@ -1,4 +1,4 @@
-package com.lezrak.scrabblebackend.common;
+package com.lezrak.scrabblebackend.exceptionHandling;
 
 public class EmailInUseException extends RuntimeException {
     private String email;

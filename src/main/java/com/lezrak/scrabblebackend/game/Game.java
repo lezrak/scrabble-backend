@@ -2,6 +2,7 @@ package com.lezrak.scrabblebackend.game;
 
 
 import com.lezrak.scrabblebackend.common.BaseEntity;
+import com.lezrak.scrabblebackend.exceptionHandling.GameFullException;
 import com.lezrak.scrabblebackend.player.Player;
 
 import javax.persistence.*;
@@ -46,12 +47,11 @@ public class Game extends BaseEntity {
         return true;
     }
 
-    public boolean addPlayer(Player player) {
+    public void addPlayer(Player player) {
         if (players.size() < 4) {
             players.add(new PlayerState(player));
-            return true;
         } else {
-            return false;
+            throw new GameFullException(this.name);
         }
     }
 

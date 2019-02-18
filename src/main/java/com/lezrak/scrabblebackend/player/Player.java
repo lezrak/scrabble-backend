@@ -34,8 +34,9 @@ public class Player extends BaseEntity {
         return this;
     }
 
-    public boolean removeGame(Game game) {
-        return this.games.remove(game);
+    public Player removeGame(Game game) {
+         this.games.remove(game);
+         return this;
     }
 
     public ArrayList<Game> getGames() {

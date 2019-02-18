@@ -1,4 +1,4 @@
-package com.lezrak.scrabblebackend.common;
+package com.lezrak.scrabblebackend.exceptionHandling;
 
 public class NicknameInUseException extends RuntimeException {
     private String nickname;

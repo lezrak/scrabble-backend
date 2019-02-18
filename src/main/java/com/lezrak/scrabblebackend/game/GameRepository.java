@@ -10,8 +10,10 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     List<Game> findAll();
 
+    List<Game> findByStartedFalse();
+
     Game findByName(String name);
 
-    List<Game> findByStartedFalse();
+    boolean existsGameByName(String name);
 
 }
