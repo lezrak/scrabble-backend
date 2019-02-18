@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler({EmailInUseException.class, NicknameInUseException.class})
+    @ExceptionHandler({EmailInUseException.class, GameFullException.class, GameNotFoundException.class,
+            NicknameInUseException.class, PlayerNotFoundException.class, PlayerNotInGameException.class})
     @ResponseBody
-    protected ResponseEntity<String> handleEmailInUse(RuntimeException e) {
+    protected ResponseEntity<String> handleIncorrectRequestException(RuntimeException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
 
 }
