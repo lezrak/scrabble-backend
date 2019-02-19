@@ -3,10 +3,10 @@ package com.lezrak.scrabblebackend.player;
 import com.lezrak.scrabblebackend.common.BaseEntity;
 import com.lezrak.scrabblebackend.game.Game;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "players")
@@ -16,9 +16,7 @@ public class Player extends BaseEntity {
     private String nickname = "";
     private String password = "";
     private boolean isEnabled = false;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Game> games = new HashSet<>();
+    private HashSet<String> games = new HashSet<>();
 
 
     public Player(String nickname) {
@@ -30,16 +28,16 @@ public class Player extends BaseEntity {
     }
 
     public Player addGame(Game game) {
-        this.games.add(game);
+        this.games.add(game.getName());
         return this;
     }
 
     public Player removeGame(Game game) {
-         this.games.remove(game);
-         return this;
+        this.games.remove(game.getName());
+        return this;
     }
 
-    public ArrayList<Game> getGames() {
+    public ArrayList<String> getGames() {
         return new ArrayList<>(games);
     }
 

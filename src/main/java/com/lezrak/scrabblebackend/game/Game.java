@@ -36,7 +36,7 @@ public class Game extends BaseEntity {
         if (started) {
             return false;
         } else {
-            nextPlayer = new Random().nextInt(players.size() + 1);
+            nextPlayer = new Random().nextInt(players.size());
             return started = true;
         }
     }

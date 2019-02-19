@@ -48,7 +48,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameDTO addPlayer(Long playerId, String gameName) {
-        validatePlayerAndGameInput(playerId,gameName);
+        validatePlayerAndGameInput(playerId, gameName);
         Game game = gameRepository.findByName(gameName);
         game.addPlayer(playerRepository.findPlayerById(playerId));
         playerRepository.save(playerRepository.findPlayerById(playerId).addGame(game));
@@ -57,20 +57,21 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void removePlayer(Long playerId, String gameName) {
-        validatePlayerAndGameInput(playerId,gameName);
-        Game game = gameRepository.findByName(gameName);
-        if (game.getPlayers().stream()
-                .map(playerState -> playerState.getPlayer())
+        validatePlayerAndGameInput(playerId, gameName);
+        if (gameRepository.findByName(gameName)
+                .getPlayers()
+                .stream()
+                .map(PlayerState::getPlayer)
                 .collect(Collectors.toSet())
                 .contains(playerRepository.findPlayerById(playerId))) {
-            gameRepository.save(gameRepository.findByName(gameName).removePlayer(playerRepository.findPlayerById(playerId)));
             playerRepository.save(playerRepository.findPlayerById(playerId).removeGame(gameRepository.findByName(gameName)));
+            gameRepository.save(gameRepository.findByName(gameName).removePlayer(playerRepository.findPlayerById(playerId)));
         } else throw new PlayerNotInGameException(playerId.toString(), gameName);
     }
 
     @Override
     public GameDTO makeMove(String gameName, Long playerId, HashMap<String, Character> move) {
-        validatePlayerAndGameInput(playerId,gameName);
+        validatePlayerAndGameInput(playerId, gameName);
         Game game = gameRepository.findByName(gameName);
         game.makeMove(playerId, move);
         return GameMapper.toGameDTO(gameRepository.save(game));
@@ -84,7 +85,7 @@ public class GameServiceImpl implements GameService {
         return GameMapper.toGameDTO(gameRepository.save(game));
     }
 
-    private void validatePlayerAndGameInput(Long playerId, String gameName){
+    private void validatePlayerAndGameInput(Long playerId, String gameName) {
         if (!playerRepository.existsPlayerById(playerId)) throw new PlayerNotFoundException(playerId.toString());
         Game game = gameRepository.findByName(gameName);
         if (game == null) throw new GameNotFoundException(gameName);
