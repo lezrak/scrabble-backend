@@ -55,7 +55,7 @@ public class GameDTO {
         return name;
     }
 
-    static class PlayerStateDTO {
+    public static class PlayerStateDTO {
 
 
         private PlayerDTO player;
@@ -83,6 +83,10 @@ public class GameDTO {
                     && this.characters.equals(that.characters)
                     && this.totalPoints == (that.totalPoints)
                     && this.lastMovePoints == (that.lastMovePoints);
+        }
+
+        public int getLastMovePoints() {
+            return lastMovePoints;
         }
 
         @Override

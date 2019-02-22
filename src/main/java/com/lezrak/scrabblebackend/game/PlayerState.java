@@ -27,6 +27,10 @@ public class PlayerState extends BaseEntity {
 
     }
 
+    public void addPoints(int points) {
+        lastMovePoints = points;
+        totalPoints += lastMovePoints;
+    }
     public Player getPlayer() {
         return player;
     }

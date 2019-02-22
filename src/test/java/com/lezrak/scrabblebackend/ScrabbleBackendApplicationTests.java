@@ -98,7 +98,18 @@ public class ScrabbleBackendApplicationTests {
         Assert.assertTrue(gameController.findByName(persistedGameDTO.getName()).getNextPlayer() >= 0);
         Assert.assertTrue(gameController.findByName(persistedGameDTO.getName()).getNextPlayer() <= 1);
         int previousNextPlayer = gameController.findByName(persistedGameDTO.getName()).getNextPlayer();
-        gameController.makeMove(persistedGameDTO.getName(), new HashMap<>(), persistedPlayer.getId());
+        Long nextPlayerId = addedPlayer.getId();
+        if (previousNextPlayer == 0) {
+            nextPlayerId = persistedPlayer.getId();
+        }
+        gameController.makeMove(persistedGameDTO.getName(), new HashMap<>(), nextPlayerId);
+
+        Assert.assertEquals(11,
+                gameController.findByName(persistedGameDTO.getName())
+                        .getPlayers()
+                        .stream()
+                        .mapToInt(GameDTO.PlayerStateDTO::getLastMovePoints)
+                        .sum());
         Assert.assertEquals((previousNextPlayer + 1) % 2, gameController.findByName(persistedGameDTO.getName()).getNextPlayer());
 
 

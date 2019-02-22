@@ -1,6 +1,7 @@
 package com.lezrak.scrabblebackend.player;
 
 import com.lezrak.scrabblebackend.common.BaseEntity;
+import com.lezrak.scrabblebackend.exceptionHandling.PlayerAlreadyEnabledException;
 import com.lezrak.scrabblebackend.game.Game;
 
 import javax.persistence.Entity;
@@ -43,6 +44,9 @@ public class Player extends BaseEntity {
 
 
     public void enable() {
+        if(isEnabled){
+            throw new PlayerAlreadyEnabledException(getNickname());
+        }
         isEnabled = true;
     }
 

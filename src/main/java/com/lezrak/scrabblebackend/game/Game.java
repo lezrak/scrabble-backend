@@ -2,10 +2,19 @@ package com.lezrak.scrabblebackend.game;
 
 
 import com.lezrak.scrabblebackend.common.BaseEntity;
-import com.lezrak.scrabblebackend.exceptionHandling.GameFullException;
+import com.lezrak.scrabblebackend.exceptionHandling.*;
 import com.lezrak.scrabblebackend.player.Player;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 @Entity
@@ -14,7 +23,7 @@ public class Game extends BaseEntity {
 
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<PlayerState> players = new LinkedHashSet<>();
+    private List<PlayerState> players = new ArrayList<>();
 
     private HashMap<String, Character> boardState = new HashMap<>();
 
@@ -32,19 +41,42 @@ public class Game extends BaseEntity {
         this.name = name;
     }
 
-    boolean startGame() {
+    public void startGame() {
         if (started) {
-            return false;
+            throw new GameAlreadyStartedException(name);
         } else {
+            started = true;
             nextPlayer = new Random().nextInt(players.size());
-            return started = true;
         }
     }
 
     //TODO : Add getting move evaluation from AI server
-    public boolean makeMove(Long playerId, HashMap<String, Character> move) {
+    public void makeMove(Long playerId, HashMap<String, Character> move) {
+
+        if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)){
+            throw new NotYourTurnException();
+        }
+        URIBuilder builder = null;
+        int points = 0;
+        try {
+            builder = new URIBuilder("https://scrabble-ai-mock.herokuapp.com/move");
+            builder.setParameter("boardState", this.boardState.toString()).setParameter("move", move.toString());
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(builder.build());
+            CloseableHttpResponse response = httpclient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            points = Integer.valueOf(EntityUtils.toString(entity, "UTF-8"));
+
+        } catch (IOException | URISyntaxException e) {
+           throw new ApplicationMaintenanceException();
+        }
+
+        for (PlayerState p : players) {
+            if (p.getPlayer().getId().equals(playerId)) {
+                p.addPoints(points);
+            }
+        }
         nextPlayer = (nextPlayer + 1) % players.size();
-        return true;
     }
 
     public void addPlayer(Player player) {
@@ -62,7 +94,7 @@ public class Game extends BaseEntity {
                 return this;
             }
         }
-        return null;
+        throw new PlayerNotInGameException(player.getNickname(), this.getName());
     }
 
     public LinkedHashSet<PlayerState> getPlayers() {
