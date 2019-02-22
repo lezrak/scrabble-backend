@@ -17,6 +17,14 @@ public class PlayerDTO {
         this.id = id;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public String getEmail() {
         return email;
     }

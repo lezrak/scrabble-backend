@@ -1,6 +1,7 @@
 package com.lezrak.scrabblebackend.gameName;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,8 @@ public class GameNameController {
         this.gameNameService = gameNameService;
     }
 
+    //todo: add admin role requirement
+    @CrossOrigin
     @PostMapping("/populate")
     public void populate() {
         gameNameService.populate();

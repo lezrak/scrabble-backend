@@ -51,11 +51,10 @@ public class ScrabbleBackendApplicationTests {
         PlayerDTO playerDTO = new PlayerDTO("", "Chad", null);
         playerDTO.setPassword("safeCombination");
 
-        // check credentials and postPlayer
-        Assert.assertFalse(playerController.checkCredentials(playerDTO));
+        // postPlayer
         PlayerDTO persistedPlayer = playerController.postPlayer(playerDTO);
-
-        Assert.assertTrue(playerController.checkCredentials(playerDTO));
+        Assert.assertEquals(playerDTO.getNickname(), persistedPlayer.getNickname());
+        Assert.assertEquals(playerDTO.getEmail(), persistedPlayer.getEmail());
 
         //getGames
         Assert.assertEquals(0, playerController.getGames(persistedPlayer.getId()).size());

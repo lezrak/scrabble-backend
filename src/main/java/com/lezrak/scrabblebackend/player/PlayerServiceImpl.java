@@ -9,6 +9,7 @@ import com.lezrak.scrabblebackend.game.GameDTO;
 import com.lezrak.scrabblebackend.game.GameMapper;
 import com.lezrak.scrabblebackend.game.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -19,13 +20,15 @@ import java.util.stream.Collectors;
 public class PlayerServiceImpl implements PlayerService {
     private PlayerRepository playerRepository;
     private GameRepository gameRepository;
-    private final VerificationTokenService verificationTokenService;
+    private  VerificationTokenService verificationTokenService;
+    private  PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PlayerServiceImpl(PlayerRepository playerRepository, GameRepository gameRepository, VerificationTokenService verificationTokenService) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, GameRepository gameRepository, VerificationTokenService verificationTokenService, PasswordEncoder passwordEncoder) {
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
         this.verificationTokenService = verificationTokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -45,7 +48,7 @@ public class PlayerServiceImpl implements PlayerService {
             throw new NicknameInUseException(playerDTO.getNickname());
         }
         Player player = new Player(playerDTO.getNickname());
-        if (playerDTO.getPassword().length() > 0) player.setPassword(playerDTO.getPassword());
+        if (playerDTO.getPassword().length() > 0) player.setPassword(passwordEncoder.encode(playerDTO.getPassword()));
         if (playerDTO.getEmail().length() > 0) {
             if (emailIsUsed(playerDTO.getEmail())) {
                 throw new EmailInUseException(playerDTO.getEmail());
