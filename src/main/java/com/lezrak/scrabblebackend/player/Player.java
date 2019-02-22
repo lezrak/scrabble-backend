@@ -22,7 +22,6 @@ public class Player extends BaseEntity {
 
     public Player(String nickname) {
         this.nickname = nickname;
-        this.isEnabled = true;
     }
 
     public Player() {

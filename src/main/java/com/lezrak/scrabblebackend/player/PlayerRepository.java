@@ -11,6 +11,8 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     List<Player> findAll();
 
+    Player findPlayerByNickname(String nickname);
+
     Player findPlayerById(Long id);
 
     boolean existsPlayerByEmailAndNicknameAndPassword(String nickname, String email, String password);

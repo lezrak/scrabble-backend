@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class PlayerController {
     }
 
     @PostMapping("/players")
-    public PlayerDTO postPlayer(PlayerDTO playerDTO) {
+    public PlayerDTO postPlayer(PlayerDTO playerDTO) throws MessagingException {
         return playerService.postPlayer(playerDTO);
     }
 

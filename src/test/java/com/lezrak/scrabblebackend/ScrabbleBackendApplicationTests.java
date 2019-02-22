@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.mail.MessagingException;
 import java.util.HashMap;
 
 import static org.mockito.Mockito.when;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ScrabbleBackendApplicationTests {
+
 
 
     @Autowired
@@ -44,14 +46,15 @@ public class ScrabbleBackendApplicationTests {
     // at the same time giving giving reasons to assume the basic functions are working.
 
     @Test
-    public void playerControllerIntegrationTest() {
+    public void playerControllerIntegrationTest() throws MessagingException {
 
-        PlayerDTO playerDTO = new PlayerDTO("testPlayer@gmail.com", "Chad", null);
+        PlayerDTO playerDTO = new PlayerDTO("", "Chad", null);
         playerDTO.setPassword("safeCombination");
 
         // check credentials and postPlayer
         Assert.assertFalse(playerController.checkCredentials(playerDTO));
         PlayerDTO persistedPlayer = playerController.postPlayer(playerDTO);
+
         Assert.assertTrue(playerController.checkCredentials(playerDTO));
 
         //getGames
@@ -60,9 +63,9 @@ public class ScrabbleBackendApplicationTests {
 
 
     @Test
-    public void gameControllerIntegrationTest() {
+    public void gameControllerIntegrationTest() throws MessagingException {
         PlayerDTO persistedPlayer = playerController.postPlayer(
-                new PlayerDTO("testPlayerJunior@gmail.com", "ChadJunior", null));
+                new PlayerDTO("", "ChadJunior", null));
         when(gameNameServiceMock.generateName()).thenReturn("popuśćmy");
 
         //getLobby and CreateGame
@@ -79,7 +82,7 @@ public class ScrabbleBackendApplicationTests {
 
         //addPlayer
         PlayerDTO addedPlayer = playerController.postPlayer(
-                new PlayerDTO("testPlayerSenior@gmail.com", "ChadSenior", null));
+                new PlayerDTO("", "ChadSenior", null));
         Assert.assertEquals(1, gameController.findByName(persistedGameDTO.getName()).getPlayers().size());
         gameController.addPlayer(addedPlayer.getId(), persistedGameDTO.getName());
         Assert.assertEquals(2, gameController.findByName(persistedGameDTO.getName()).getPlayers().size());
