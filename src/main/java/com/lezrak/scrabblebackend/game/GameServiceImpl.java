@@ -33,6 +33,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameDTO findByName(String gameName) {
+        if (!gameRepository.existsGameByName(gameName)) throw new GameNotFoundException(gameName);
         return GameMapper.toGameDTO(gameRepository.findByName(gameName));
     }
 
@@ -87,7 +88,6 @@ public class GameServiceImpl implements GameService {
 
     private void validatePlayerAndGameInput(Long playerId, String gameName) {
         if (!playerRepository.existsPlayerById(playerId)) throw new PlayerNotFoundException(playerId.toString());
-        Game game = gameRepository.findByName(gameName);
-        if (game == null) throw new GameNotFoundException(gameName);
+        if (!gameRepository.existsGameByName(gameName)) throw new GameNotFoundException(gameName);
     }
 }
