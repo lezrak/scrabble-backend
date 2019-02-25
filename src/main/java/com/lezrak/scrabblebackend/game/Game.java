@@ -50,7 +50,6 @@ public class Game extends BaseEntity {
         }
     }
 
-    //TODO : Add getting move evaluation from AI server
     public void makeMove(Long playerId, HashMap<String, Character> move) {
 
         if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)){

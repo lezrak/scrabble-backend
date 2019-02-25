@@ -20,12 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    private  UserDetailsService userDetailsService;
-
+    private UserDetailsService userDetailsService;
 
 
     @Override
-    protected void configure (HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
         http.authorizeRequests()

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
+@RequestMapping("/games")
 public class GameController {
     private final GameService gameService;
 
@@ -16,27 +17,27 @@ public class GameController {
     }
 
     @CrossOrigin
-    @GetMapping("/games")
+    @GetMapping
     public List<GameDTO> getLobby() {
         return gameService.findAllByStartedFalse();
     }
 
     @CrossOrigin
-    @GetMapping("/games/{name}")
+    @GetMapping("/{name}")
     public GameDTO findByName(@PathVariable String name) {
         return gameService.findByName(name);
     }
 
     //todo: check authenticated nickname vs requested id
     @CrossOrigin
-    @PostMapping("/games/")
+    @PostMapping
     public GameDTO createGame(@RequestParam Long playerId) {
         return gameService.createGame(playerId);
     }
 
     //todo: check authenticated nickname vs requested id
     @CrossOrigin
-    @PatchMapping("/games/{name}/move")
+    @PatchMapping("/{name}/move")
     public GameDTO makeMove(@PathVariable String name,
                             @RequestBody HashMap<String, Character> move,
                             @RequestBody Long playerId) {
@@ -45,21 +46,21 @@ public class GameController {
 
     //todo: check authenticated nickname vs requested id
     @CrossOrigin
-    @PatchMapping("/games/{name}/start")
+    @PatchMapping("/{name}/start")
     public GameDTO startGame(@PathVariable String name) {
         return gameService.startGame(name);
     }
 
     //todo: check authenticated nickname vs requested id
     @CrossOrigin
-    @PatchMapping("/games/{name}/addPlayer")
+    @PatchMapping("/{name}/addPlayer")
     public GameDTO addPlayer(@RequestParam Long playerId, @PathVariable String name) {
         return gameService.addPlayer(playerId, name);
     }
 
     //todo: check authenticated nickname vs requested id
     @CrossOrigin
-    @PatchMapping("/games/{name}/removePlayer")
+    @PatchMapping("/{name}/removePlayer")
     public void removePlayer(@RequestParam Long playerId, @PathVariable String name) {
         gameService.removePlayer(playerId, name);
     }

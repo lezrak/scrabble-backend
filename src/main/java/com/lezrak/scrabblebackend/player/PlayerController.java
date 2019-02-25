@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/players")
 public class PlayerController {
 
     private PlayerService playerService;
@@ -20,14 +21,13 @@ public class PlayerController {
 
 
     @CrossOrigin
-    @PostMapping("/players")
+    @PostMapping
     public PlayerDTO postPlayer(@RequestBody PlayerDTO playerDTO) throws MessagingException {
         return playerService.postPlayer(playerDTO);
     }
 
-    //todo: check authenticated nickname vs requested id
     @CrossOrigin
-    @GetMapping("/players/{id}/games")
+    @GetMapping("/{id}/games")
     public List<GameDTO> getGames(@PathVariable Long id) {
         return playerService.getGames(id);
     }

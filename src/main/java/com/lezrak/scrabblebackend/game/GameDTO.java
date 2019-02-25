@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class GameDTO {
+
     private LinkedHashSet<PlayerStateDTO> players = new LinkedHashSet<>();
 
     private HashMap<String, Character> boardState = new HashMap<>();

@@ -35,15 +35,17 @@ public class GameNameServiceImpl implements GameNameService {
 
     @Override
     public void populate() {
-        try {
-            File file = new ClassPathResource("slowa.txt").getFile();
-            FileInputStream fStream = new FileInputStream(file);
-            DataInputStream in = new DataInputStream(fStream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            gameNameRepository.saveAll(br.lines().map(GameName::new).collect(Collectors.toList()));
-            in.close();
-        } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+        if (gameNameRepository.findAll().size() == 0) {
+            try {
+                File file = new ClassPathResource("slowa.txt").getFile();
+                FileInputStream fStream = new FileInputStream(file);
+                DataInputStream in = new DataInputStream(fStream);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                gameNameRepository.saveAll(br.lines().map(GameName::new).collect(Collectors.toList()));
+                in.close();
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            }
         }
     }
 }

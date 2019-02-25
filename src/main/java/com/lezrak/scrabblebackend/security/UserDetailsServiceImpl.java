@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Primary
 @Component
-public class UserDetailsServiceImpl  implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
+
     @Autowired
     private PlayerRepository playerRepository;
 

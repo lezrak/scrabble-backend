@@ -15,7 +15,6 @@ public class GameNameController {
         this.gameNameService = gameNameService;
     }
 
-    //todo: add admin role requirement
     @CrossOrigin
     @PostMapping("/populate")
     public void populate() {
