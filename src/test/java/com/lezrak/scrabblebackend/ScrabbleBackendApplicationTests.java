@@ -5,15 +5,19 @@ import com.lezrak.scrabblebackend.game.GameDTO;
 import com.lezrak.scrabblebackend.gameName.GameNameService;
 import com.lezrak.scrabblebackend.player.PlayerController;
 import com.lezrak.scrabblebackend.player.PlayerDTO;
+import com.lezrak.scrabblebackend.player.PlayerRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.MessagingException;
+import java.util.Collections;
 import java.util.HashMap;
 
 import static org.mockito.Mockito.when;
@@ -23,6 +27,8 @@ import static org.mockito.Mockito.when;
 public class ScrabbleBackendApplicationTests {
 
 
+    @Autowired
+    PlayerRepository playerRepository;
 
     @Autowired
     PlayerController playerController;
@@ -69,6 +75,8 @@ public class ScrabbleBackendApplicationTests {
 
         //getLobby and CreateGame
         Assert.assertEquals(0, gameController.getLobby().size());
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                playerRepository.findPlayerById(persistedPlayer.getId()), null, Collections.emptySet()));
         GameDTO persistedGameDTO = gameController.createGame(persistedPlayer.getId());
         Assert.assertEquals("popuśćmy", persistedGameDTO.getName());
         Assert.assertEquals(-1, persistedGameDTO.getNextPlayer());
@@ -83,6 +91,8 @@ public class ScrabbleBackendApplicationTests {
         PlayerDTO addedPlayer = playerController.postPlayer(
                 new PlayerDTO("", "ChadSenior", null));
         Assert.assertEquals(1, gameController.findByName(persistedGameDTO.getName()).getPlayers().size());
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                playerRepository.findPlayerById(addedPlayer.getId()), null, Collections.emptySet()));
         gameController.addPlayer(addedPlayer.getId(), persistedGameDTO.getName());
         Assert.assertEquals(2, gameController.findByName(persistedGameDTO.getName()).getPlayers().size());
 
@@ -104,6 +114,8 @@ public class ScrabbleBackendApplicationTests {
         if (previousNextPlayer == 0) {
             nextPlayerId = persistedPlayer.getId();
         }
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                playerRepository.findPlayerById(nextPlayerId), null, Collections.emptySet()));
         gameController.makeMove(persistedGameDTO.getName(), new HashMap<>(), nextPlayerId);
 
         Assert.assertEquals(11,

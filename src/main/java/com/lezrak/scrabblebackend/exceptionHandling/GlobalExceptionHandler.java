@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({EmailInUseException.class, GameFullException.class, GameNotFoundException.class,
             NicknameInUseException.class, PlayerNotFoundException.class, PlayerNotInGameException.class,
             NotYourTurnException.class, ApplicationMaintenanceException.class, GameAlreadyStartedException.class,
-            PlayerAlreadyEnabledException.class, EmailNotVerified.class})
+            PlayerAlreadyEnabledException.class, EmailNotVerified.class, IdentityMismatchException.class})
     @ResponseBody
     protected ResponseEntity<String> handleIncorrectRequestException(RuntimeException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

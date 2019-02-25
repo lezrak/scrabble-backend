@@ -1,11 +1,14 @@
 package com.lezrak.scrabblebackend.game;
 
 import com.lezrak.scrabblebackend.exceptionHandling.GameNotFoundException;
+import com.lezrak.scrabblebackend.exceptionHandling.IdentityMismatchException;
 import com.lezrak.scrabblebackend.exceptionHandling.PlayerNotFoundException;
 import com.lezrak.scrabblebackend.exceptionHandling.PlayerNotInGameException;
 import com.lezrak.scrabblebackend.gameName.GameNameService;
+import com.lezrak.scrabblebackend.player.Player;
 import com.lezrak.scrabblebackend.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -40,6 +43,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameDTO createGame(Long playerId) {
+        identityCheck(playerId);
         if (!playerRepository.existsPlayerById(playerId)) throw new PlayerNotFoundException(playerId.toString());
         Game game = new Game(gameNameService.generateName());
         game.addPlayer(playerRepository.findPlayerById(playerId));
@@ -49,6 +53,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameDTO addPlayer(Long playerId, String gameName) {
+        identityCheck(playerId);
         validatePlayerAndGameInput(playerId, gameName);
         Game game = gameRepository.findByName(gameName);
         game.addPlayer(playerRepository.findPlayerById(playerId));
@@ -58,6 +63,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void removePlayer(Long playerId, String gameName) {
+        identityCheck(playerId);
         validatePlayerAndGameInput(playerId, gameName);
         if (gameRepository.findByName(gameName)
                 .getPlayers()
@@ -72,6 +78,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameDTO makeMove(String gameName, Long playerId, HashMap<String, Character> move) {
+        identityCheck(playerId);
         validatePlayerAndGameInput(playerId, gameName);
         Game game = gameRepository.findByName(gameName);
         game.makeMove(playerId, move);
@@ -89,5 +96,12 @@ public class GameServiceImpl implements GameService {
     private void validatePlayerAndGameInput(Long playerId, String gameName) {
         if (!playerRepository.existsPlayerById(playerId)) throw new PlayerNotFoundException(playerId.toString());
         if (!gameRepository.existsGameByName(gameName)) throw new GameNotFoundException(gameName);
+    }
+
+    private void identityCheck(Long playerId) {
+        Long credentialsId = ((Player) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        if (!(credentialsId.equals(playerId))) {
+            throw new IdentityMismatchException(credentialsId.toString(), playerId.toString());
+        }
     }
 }
