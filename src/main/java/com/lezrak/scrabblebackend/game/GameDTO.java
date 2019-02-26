@@ -90,6 +90,18 @@ public class GameDTO {
             return lastMovePoints;
         }
 
+        public PlayerDTO getPlayer() {
+            return player;
+        }
+
+        public int getTotalPoints() {
+            return totalPoints;
+        }
+
+        public ArrayList<Character> getCharacters() {
+            return characters;
+        }
+
         @Override
         public int hashCode() {
             return (int) totalPoints * lastMovePoints * characters.hashCode();

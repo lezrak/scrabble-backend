@@ -56,6 +56,7 @@ public class GameNameServiceImpl implements GameNameService {
                     if (list.size() == 329) {
                         gameNameRepository.saveAll(list.stream().map(GameName::new).collect(Collectors.toList()));
                         list.clear();
+                        System.out.println("Populating database - currently at: "+line);
                     }
                 }
                 in.close();
