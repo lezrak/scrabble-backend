@@ -2,11 +2,15 @@ package com.lezrak.scrabblebackend.gameName;
 
 import com.lezrak.scrabblebackend.game.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -37,7 +41,7 @@ public class GameNameServiceImpl implements GameNameService {
 
 
     @Override
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public  void populate() {
         if (gameNameRepository.findAll().size() == 0) {
             try {
