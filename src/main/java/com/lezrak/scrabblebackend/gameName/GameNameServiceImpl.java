@@ -37,8 +37,7 @@ public class GameNameServiceImpl implements GameNameService {
     public void populate() {
         if (gameNameRepository.findAll().size() == 0) {
             try {
-                File file = new ClassPathResource("slowa.txt").getFile();
-                FileInputStream fStream = new FileInputStream(file);
+                InputStream fStream = new ClassPathResource("slowa.txt").getInputStream();
                 DataInputStream in = new DataInputStream(fStream);
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 gameNameRepository.saveAll(br.lines().map(GameName::new).collect(Collectors.toList()));
