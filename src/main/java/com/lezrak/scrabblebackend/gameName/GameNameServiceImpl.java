@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -34,14 +36,23 @@ public class GameNameServiceImpl implements GameNameService {
 
 
     @Override
-    public void populate() {
+    @PostConstruct
+    public  void populate() {
         if (gameNameRepository.findAll().size() == 0) {
             try {
-                File file = new ClassPathResource("slowa.txt").getFile();
-                FileInputStream fStream = new FileInputStream(file);
+                InputStream fStream = new ClassPathResource("slowa.txt").getInputStream();
                 DataInputStream in = new DataInputStream(fStream);
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                gameNameRepository.saveAll(br.lines().map(GameName::new).collect(Collectors.toList()));
+                String line;
+                ArrayList<String> list = new ArrayList<>();
+                while ((line = br.readLine()) != null) {
+                    list.add(line);
+                    //there is 2965277 words on the list, 329 is divider of 2965277, which allows us to use batching and save all words from list
+                    if (list.size() == 329) {
+                        gameNameRepository.saveAll(list.stream().map(GameName::new).collect(Collectors.toList()));
+                        list.clear();
+                    }
+                }
                 in.close();
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
