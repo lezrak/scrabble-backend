@@ -27,9 +27,15 @@ public class PlayerController {
     }
 
     @CrossOrigin
-    @GetMapping("/{id}/games")
-    public List<GameDTO> getGames(@PathVariable Long id) {
-        return playerService.getGames(id);
+    @GetMapping("/{playerId}/games")
+    public List<GameDTO> getGames(@PathVariable Long playerId) {
+        return playerService.getGames(playerId);
+    }
+
+    @CrossOrigin
+    @GetMapping("/{playerName}")
+    public PlayerDTO getPlayerInfo (@PathVariable String playerName){
+        return playerService.getPlayerInfo(playerName);
     }
 
 }

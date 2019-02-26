@@ -2,7 +2,6 @@ package com.lezrak.scrabblebackend.player;
 
 import com.lezrak.scrabblebackend.emailVerification.VerificationTokenService;
 import com.lezrak.scrabblebackend.exceptionHandling.EmailInUseException;
-import com.lezrak.scrabblebackend.exceptionHandling.EmailNotVerified;
 import com.lezrak.scrabblebackend.exceptionHandling.NicknameInUseException;
 import com.lezrak.scrabblebackend.exceptionHandling.PlayerNotFoundException;
 import com.lezrak.scrabblebackend.game.GameDTO;
@@ -32,13 +31,9 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public boolean checkCredentials(PlayerDTO playerDTO) {
-        if(playerDTO.getEmail().length()>0 && emailIsUsed(playerDTO.getEmail())){
-            if(!playerRepository.findPlayerByNickname(playerDTO.getNickname()).isEnabled())
-                throw new EmailNotVerified(playerDTO.getEmail());
-        }
-        return playerRepository.existsPlayerByEmailAndNicknameAndPassword(
-                playerDTO.getEmail(), playerDTO.getNickname(), playerDTO.getPassword());
+    public PlayerDTO getPlayerInfo(String playerName) {
+        if (!nicknameIsUsed(playerName)) throw new PlayerNotFoundException(playerName);
+        return PlayerMapper.toPlayerDTO(playerRepository.findPlayerByNickname(playerName));
     }
 
 

@@ -23,9 +23,9 @@ public class GameController {
     }
 
     @CrossOrigin
-    @GetMapping("/{name}")
-    public GameDTO findByName(@PathVariable String name) {
-        return gameService.findByName(name);
+    @GetMapping("/{gameName}")
+    public GameDTO findByName(@PathVariable String gameName) {
+        return gameService.findByName(gameName);
     }
 
     @CrossOrigin
@@ -35,29 +35,29 @@ public class GameController {
     }
 
     @CrossOrigin
-    @PatchMapping("/{name}/move")
-    public GameDTO makeMove(@PathVariable String name,
+    @PatchMapping("/{gameName}/move")
+    public GameDTO makeMove(@PathVariable String gameName,
                             @RequestBody HashMap<String, Character> move,
                             @RequestBody Long playerId) {
-        return gameService.makeMove(name, playerId, move);
+        return gameService.makeMove(gameName, playerId, move);
     }
 
     @CrossOrigin
-    @PatchMapping("/{name}/start")
-    public GameDTO startGame(@PathVariable String name) {
-        return gameService.startGame(name);
+    @PatchMapping("/{gameName}/start")
+    public GameDTO startGame(@PathVariable String gameName) {
+        return gameService.startGame(gameName);
     }
 
     @CrossOrigin
-    @PatchMapping("/{name}/addPlayer")
-    public GameDTO addPlayer(@RequestParam Long playerId, @PathVariable String name) {
-        return gameService.addPlayer(playerId, name);
+    @PatchMapping("/{gameName}/addPlayer")
+    public GameDTO addPlayer(@RequestParam Long playerId, @PathVariable String gameName) {
+        return gameService.addPlayer(playerId, gameName);
     }
 
     @CrossOrigin
-    @PatchMapping("/{name}/removePlayer")
-    public void removePlayer(@RequestParam Long playerId, @PathVariable String name) {
-        gameService.removePlayer(playerId, name);
+    @PatchMapping("/{gameName}/removePlayer")
+    public void removePlayer(@RequestParam Long playerId, @PathVariable String gameName) {
+        gameService.removePlayer(playerId, gameName);
     }
 
 }

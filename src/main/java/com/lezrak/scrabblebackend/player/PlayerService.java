@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PlayerService {
 
-    boolean checkCredentials(PlayerDTO playerDTO);
+    PlayerDTO getPlayerInfo(String playerName);
 
     PlayerDTO postPlayer(PlayerDTO playerDTO) throws MessagingException;
 
