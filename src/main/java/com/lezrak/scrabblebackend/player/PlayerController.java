@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/players")
 public class PlayerController {
@@ -20,19 +21,16 @@ public class PlayerController {
     }
 
 
-    @CrossOrigin
     @PostMapping
     public PlayerDTO postPlayer(@RequestBody PlayerDTO playerDTO) throws MessagingException {
         return playerService.postPlayer(playerDTO);
     }
 
-    @CrossOrigin
     @GetMapping("/{playerId}/games")
     public List<GameDTO> getGames(@PathVariable Long playerId) {
         return playerService.getGames(playerId);
     }
 
-    @CrossOrigin
     @GetMapping("/{playerName}")
     public PlayerDTO getPlayerInfo (@PathVariable String playerName){
         return playerService.getPlayerInfo(playerName);

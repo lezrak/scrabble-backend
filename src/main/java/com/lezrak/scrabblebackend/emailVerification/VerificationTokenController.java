@@ -3,6 +3,7 @@ package com.lezrak.scrabblebackend.emailVerification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/verification-token")
 public class VerificationTokenController {
@@ -13,7 +14,6 @@ public class VerificationTokenController {
         this.verificationTokenService = verificationTokenService;
     }
 
-    @CrossOrigin
     @GetMapping("/{token}")
     public void verify(@PathVariable String token) {
         verificationTokenService.verify(token);

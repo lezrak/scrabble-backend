@@ -52,7 +52,7 @@ public class Game extends BaseEntity {
 
     public void makeMove(Long playerId, HashMap<String, Character> move) {
 
-        if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)){
+        if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)) {
             throw new NotYourTurnException();
         }
         URIBuilder builder = null;
@@ -67,7 +67,7 @@ public class Game extends BaseEntity {
             points = Integer.valueOf(EntityUtils.toString(entity, "UTF-8"));
 
         } catch (IOException | URISyntaxException e) {
-           throw new ApplicationMaintenanceException();
+            throw new ApplicationMaintenanceException();
         }
 
         for (PlayerState p : players) {
