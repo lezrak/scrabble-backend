@@ -22,7 +22,6 @@ import java.util.*;
 public class Game extends BaseEntity {
 
 
-    //todo:sorting players
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PlayerState> players = new ArrayList<>();
 
@@ -54,9 +53,12 @@ public class Game extends BaseEntity {
     //todo: substitute with REST Template
     public void makeMove(Long playerId, HashMap<String, Character> move) {
 
+        players.sort(PlayerState::compareTo);
         if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)) {
             throw new NotYourTurnException();
         }
+
+
         URIBuilder builder = null;
         int points = 0;
         try {
@@ -72,6 +74,7 @@ public class Game extends BaseEntity {
             throw new ApplicationMaintenanceException();
         }
 
+
         for (PlayerState p : players) {
             if (p.getPlayer().getId().equals(playerId)) {
                 p.addPoints(points);
@@ -79,6 +82,8 @@ public class Game extends BaseEntity {
         }
         nextPlayer = (nextPlayer + 1) % players.size();
     }
+
+
 
     public void addPlayer(Player player) {
         if (players.size() < 4) {

@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 
 @Entity
-public class PlayerState extends BaseEntity {
+public class PlayerState extends BaseEntity implements Comparable<PlayerState>{
 
     @ManyToOne
     private Player player;
@@ -25,6 +25,11 @@ public class PlayerState extends BaseEntity {
     PlayerState(Player player) {
         this.player = player;
 
+    }
+
+    @Override
+    public int compareTo(PlayerState o) {
+        return player.getNickname().compareTo(o.getPlayer().getNickname());
     }
 
     public void addPoints(int points) {
