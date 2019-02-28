@@ -1,4 +1,4 @@
-package com.lezrak.scrabblebackend.exceptionHandling;
+package com.lezrak.scrabblebackend.exception;
 
 public class PlayerAlreadyEnabledException  extends RuntimeException {
 private String nickname;

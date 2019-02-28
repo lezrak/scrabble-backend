@@ -1,9 +1,9 @@
 package com.lezrak.scrabblebackend.player;
 
 import com.lezrak.scrabblebackend.emailVerification.VerificationTokenService;
-import com.lezrak.scrabblebackend.exceptionHandling.EmailInUseException;
-import com.lezrak.scrabblebackend.exceptionHandling.NicknameInUseException;
-import com.lezrak.scrabblebackend.exceptionHandling.PlayerNotFoundException;
+import com.lezrak.scrabblebackend.exception.EmailInUseException;
+import com.lezrak.scrabblebackend.exception.NicknameInUseException;
+import com.lezrak.scrabblebackend.exception.PlayerNotFoundException;
 import com.lezrak.scrabblebackend.game.GameDTO;
 import com.lezrak.scrabblebackend.game.GameMapper;
 import com.lezrak.scrabblebackend.game.GameRepository;

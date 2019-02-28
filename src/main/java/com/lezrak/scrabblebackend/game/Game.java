@@ -2,7 +2,7 @@ package com.lezrak.scrabblebackend.game;
 
 
 import com.lezrak.scrabblebackend.common.BaseEntity;
-import com.lezrak.scrabblebackend.exceptionHandling.*;
+import com.lezrak.scrabblebackend.exception.*;
 import com.lezrak.scrabblebackend.player.Player;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;

@@ -1,4 +1,4 @@
-package com.lezrak.scrabblebackend.exceptionHandling;
+package com.lezrak.scrabblebackend.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +12,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({EmailInUseException.class, GameFullException.class, GameNotFoundException.class,
             NicknameInUseException.class, PlayerNotFoundException.class, PlayerNotInGameException.class,
-            NotYourTurnException.class, ApplicationMaintenanceException.class, GameAlreadyStartedException.class,
-            PlayerAlreadyEnabledException.class, EmailNotVerified.class, IdentityMismatchException.class})
+            NotYourTurnException.class, GameAlreadyStartedException.class,
+            PlayerAlreadyEnabledException.class, EmailNotVerifiedException.class, IdentityMismatchException.class})
     @ResponseBody
     protected ResponseEntity<String> handleIncorrectRequestException(RuntimeException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ApplicationMaintenanceException.class})
+    @ResponseBody
+    protected ResponseEntity<String> handleApplicationException(RuntimeException e) {
+        return new ResponseEntity<>((e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

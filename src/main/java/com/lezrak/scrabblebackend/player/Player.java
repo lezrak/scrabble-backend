@@ -1,7 +1,7 @@
 package com.lezrak.scrabblebackend.player;
 
 import com.lezrak.scrabblebackend.common.BaseEntity;
-import com.lezrak.scrabblebackend.exceptionHandling.PlayerAlreadyEnabledException;
+import com.lezrak.scrabblebackend.exception.PlayerAlreadyEnabledException;
 import com.lezrak.scrabblebackend.game.Game;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

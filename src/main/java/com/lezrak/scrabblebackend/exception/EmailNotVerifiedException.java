@@ -1,9 +1,9 @@
-package com.lezrak.scrabblebackend.exceptionHandling;
+package com.lezrak.scrabblebackend.exception;
 
-public class EmailNotVerified extends RuntimeException {
+public class EmailNotVerifiedException extends RuntimeException {
     private String mail;
 
-    public EmailNotVerified(String mail) {
+    public EmailNotVerifiedException(String mail) {
         super(String.format("Email %s is not verified. Please check inbox for verification link.", mail));
         this.mail = mail;
     }

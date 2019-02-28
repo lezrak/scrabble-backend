@@ -1,9 +1,9 @@
 package com.lezrak.scrabblebackend.game;
 
-import com.lezrak.scrabblebackend.exceptionHandling.GameNotFoundException;
-import com.lezrak.scrabblebackend.exceptionHandling.IdentityMismatchException;
-import com.lezrak.scrabblebackend.exceptionHandling.PlayerNotFoundException;
-import com.lezrak.scrabblebackend.exceptionHandling.PlayerNotInGameException;
+import com.lezrak.scrabblebackend.exception.GameNotFoundException;
+import com.lezrak.scrabblebackend.exception.IdentityMismatchException;
+import com.lezrak.scrabblebackend.exception.PlayerNotFoundException;
+import com.lezrak.scrabblebackend.exception.PlayerNotInGameException;
 import com.lezrak.scrabblebackend.gameName.GameNameService;
 import com.lezrak.scrabblebackend.player.Player;
 import com.lezrak.scrabblebackend.player.PlayerRepository;
