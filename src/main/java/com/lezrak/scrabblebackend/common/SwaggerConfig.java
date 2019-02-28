@@ -21,7 +21,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.regex("(?!/error).+"))
+                .paths(PathSelectors.ant("/api/**"))
                 .build()
                 .apiInfo(apiInfo());
     }

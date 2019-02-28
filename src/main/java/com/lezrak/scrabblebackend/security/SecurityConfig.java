@@ -28,8 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/players").permitAll()
-                .antMatchers("/verification-token/*").permitAll()
+                .antMatchers("/api/players").permitAll()
+                .antMatchers("/api/verification-token/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

@@ -9,7 +9,7 @@ import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/players")
+@RequestMapping("/api/players")
 public class PlayerController {
 
     private PlayerService playerService;
