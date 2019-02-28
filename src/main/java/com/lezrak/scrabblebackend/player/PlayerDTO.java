@@ -16,6 +16,7 @@ public class PlayerDTO {
         this.nickname = nickname;
         this.email = email;
         this.id = id;
+        this.password = "";
     }
 
     public PlayerDTO(String email, String nickname, String password, Long id) {

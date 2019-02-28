@@ -22,6 +22,7 @@ import java.util.*;
 public class Game extends BaseEntity {
 
 
+    //todo:sorting players
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PlayerState> players = new ArrayList<>();
 
@@ -50,6 +51,7 @@ public class Game extends BaseEntity {
         }
     }
 
+    //todo: substitute with REST Template
     public void makeMove(Long playerId, HashMap<String, Character> move) {
 
         if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)) {
