@@ -5,7 +5,7 @@ import com.lezrak.scrabblebackend.player.Player;
 import javax.mail.MessagingException;
 
 public interface VerificationTokenService {
-    public void verify(String token);
+     void verify(String token);
 
-    public void createToken(Player player) throws MessagingException;
+     void createToken(Player player) throws MessagingException;
 }

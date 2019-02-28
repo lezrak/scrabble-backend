@@ -13,7 +13,8 @@ import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class VerificationTokenServiceImpl implements VerificationTokenService {
@@ -61,13 +62,13 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         javaMailSender.send(mail);
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(cron = "0 0 0 * * ?")
     public void clearExpiredTokens() {
         Set<VerificationToken> tokens = verificationTokenRepository.findAllByPlayerIsEnabledFalse();
         final LocalDateTime now = LocalDateTime.now();
         Set<VerificationToken> expiredTokens = tokens.stream()
                 .filter(token -> token.getExpirationDate().isBefore(now))
-                .collect(Collectors.toSet());
+                .collect(toSet());
         verificationTokenRepository.deleteAll(expiredTokens);
     }
 }
