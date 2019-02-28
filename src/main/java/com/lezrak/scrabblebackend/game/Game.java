@@ -31,7 +31,7 @@ public class Game extends BaseEntity {
 
     private boolean started = false;
 
-    @Column(name = "gameName", unique = true, nullable = false, length = 60)
+    @Column(name = "game_name", unique = true, nullable = false, length = 60)
     private String name;
 
     public Game() {

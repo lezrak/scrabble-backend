@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -67,7 +68,7 @@ public class PlayerServiceImpl implements PlayerService {
                         .getGames()
                         .stream()
                         .map(gameRepository::findByName)
-                        .collect(Collectors.toList()));
+                        .collect(toList()));
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.lezrak.scrabblebackend.game;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class GameMapper {
 
@@ -14,7 +15,7 @@ public class GameMapper {
     public static List<GameDTO> toGameDTO(List<Game> gameList) {
         return gameList.stream()
                 .map(GameMapper::toGameDTO)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
 

@@ -54,7 +54,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public GameDTO addPlayer(Long playerId, String gameName) {
         identityCheck(playerId);
-        validatePlayerAndGameInput(playerId, gameName);
+        validate(playerId, gameName);
         Game game = gameRepository.findByName(gameName);
         game.addPlayer(playerRepository.findPlayerById(playerId));
         playerRepository.save(playerRepository.findPlayerById(playerId).addGame(game));
@@ -64,7 +64,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void removePlayer(Long playerId, String gameName) {
         identityCheck(playerId);
-        validatePlayerAndGameInput(playerId, gameName);
+        validate(playerId, gameName);
         if (gameRepository.findByName(gameName)
                 .getPlayers()
                 .stream()
@@ -79,7 +79,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public GameDTO makeMove(String gameName, Long playerId, HashMap<String, Character> move) {
         identityCheck(playerId);
-        validatePlayerAndGameInput(playerId, gameName);
+        validate(playerId, gameName);
         Game game = gameRepository.findByName(gameName);
         game.makeMove(playerId, move);
         return GameMapper.toGameDTO(gameRepository.save(game));
@@ -93,7 +93,7 @@ public class GameServiceImpl implements GameService {
         return GameMapper.toGameDTO(gameRepository.save(game));
     }
 
-    private void validatePlayerAndGameInput(Long playerId, String gameName) {
+    private void validate(Long playerId, String gameName) {
         if (!playerRepository.existsPlayerById(playerId)) throw new PlayerNotFoundException(playerId.toString());
         if (!gameRepository.existsGameByName(gameName)) throw new GameNotFoundException(gameName);
     }
