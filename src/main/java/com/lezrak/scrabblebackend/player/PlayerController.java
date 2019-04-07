@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/players")
 public class PlayerController {
