@@ -116,9 +116,12 @@ public class ScrabbleBackendApplicationTests {
         }
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                 playerRepository.findPlayerById(nextPlayerId), null, Collections.emptySet()));
-        gameController.makeMove(persistedGameDTO.getName(), new HashMap<>(), nextPlayerId);
+        HashMap<String, Character> move = new HashMap<>();
+        move.put("H8", 'T');
+        move.put("H9", 'O');
+        gameController.makeMove(persistedGameDTO.getName(), move, nextPlayerId);
 
-        Assert.assertEquals(11,
+        Assert.assertEquals(3,
                 gameController.findByName(persistedGameDTO.getName())
                         .getPlayers()
                         .stream()

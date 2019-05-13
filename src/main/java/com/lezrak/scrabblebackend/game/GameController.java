@@ -2,6 +2,8 @@ package com.lezrak.scrabblebackend.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,22 @@ public class GameController {
     @GetMapping
     public List<GameDTO> getLobby() {
         return gameService.findAllByStartedFalse();
+    }
+
+    @GetMapping("/testAI")
+    public String testAI() {
+        HashMap<String, Character> move = new HashMap<>();
+        move.put("H8", 'T');
+        move.put("H9", 'O');
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/evaluate";
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(transactionUrl)
+                .queryParam("board", new HashMap<>())
+                .queryParam("move", move.toString());
+
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(builder.toUriString(), String.class);
     }
 
     @GetMapping("/{gameName}")

@@ -54,15 +54,22 @@ public class Game extends BaseEntity {
         }
 
 
-        String transactionUrl = "https://scrabble-ai-mock.herokuapp.com/move";
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/evaluate";
 
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(transactionUrl)
-                .queryParam("boardState", this.boardState.toString())
+                .queryParam("board", this.boardState.toString())
                 .queryParam("move", move.toString());
 
         RestTemplate restTemplate = new RestTemplate();
-        Integer points = restTemplate.getForObject(builder.toUriString(), Integer.class);
+        String pointsAsString = restTemplate.getForObject(builder.toUriString(), String.class);
+        System.out.println(pointsAsString);
+        int points = 0;
+        if (pointsAsString != null) {
+            points = Integer.parseInt(pointsAsString);
+        }else {
+            throw new RuntimeException("AI eval error");
+        }
 
 
         for (PlayerState p : players) {
