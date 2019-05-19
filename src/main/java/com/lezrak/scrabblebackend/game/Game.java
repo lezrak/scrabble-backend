@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.persistence.*;
 import java.util.*;
 
+@SuppressWarnings("WeakerAccess")
 @Entity
 @Table(name = "games")
 public class Game extends BaseEntity {
@@ -42,8 +43,52 @@ public class Game extends BaseEntity {
             throw new GameAlreadyStartedException(name);
         } else {
             started = true;
+            getLettersForStart();
             nextPlayer = new Random().nextInt(players.size());
         }
+    }
+
+    private void getLettersForStart() {
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(transactionUrl)
+                .queryParam("used", "")
+                .queryParam("size", players.size() * 7);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String letters = restTemplate.getForObject(builder.toUriString(), String.class);
+        System.out.println("Letters received from AI server:");
+        System.out.println(letters);
+
+        int a = 0;
+        for (PlayerState p : players) {
+            assert letters != null;
+            p.addCharacters((ArrayList) Arrays.asList(letters.substring(a, a + 7).toCharArray()));
+            a += 7;
+        }
+    }
+
+    public void getLetters(int i) {
+        String used = "";
+        used += (boardState.values().toString());
+        for (PlayerState playerState : players) {
+            used += playerState.getCharacters();
+        }
+
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(transactionUrl)
+                .queryParam("used", used)
+                .queryParam("size", i);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String letters = restTemplate.getForObject(builder.toUriString(), String.class);
+        players.get(nextPlayer).addCharacters((ArrayList) Arrays.asList(letters.toCharArray()));
+        System.out.println("Letters received from AI server:");
+        System.out.println(letters);
+
     }
 
     public void makeMove(Long playerId, HashMap<String, Character> move) {
@@ -52,7 +97,6 @@ public class Game extends BaseEntity {
         if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)) {
             throw new NotYourTurnException();
         }
-
 
         String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/evaluate";
 
@@ -64,14 +108,16 @@ public class Game extends BaseEntity {
         RestTemplate restTemplate = new RestTemplate();
         String pointsAsString = restTemplate.getForObject(builder.toUriString(), String.class);
         System.out.println(pointsAsString);
-        int points = 0;
+        int points;
         if (pointsAsString != null) {
             points = Integer.parseInt(pointsAsString);
-        }else {
+        } else {
             throw new RuntimeException("AI eval error");
         }
-
-
+        if (points > 0) {
+            move.values().forEach(players.get(nextPlayer)::removeCharacter);
+            getLetters(move.size());
+        }
         for (PlayerState p : players) {
             if (p.getPlayer().getId().equals(playerId)) {
                 p.addPoints(points);

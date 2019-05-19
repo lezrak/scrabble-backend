@@ -51,4 +51,21 @@ public class PlayerState extends BaseEntity implements Comparable<PlayerState>{
     public ArrayList<Character> getCharacters() {
         return characters;
     }
+
+    public void addCharacters(ArrayList<Character> newChars) {
+        characters.addAll(newChars);
+    }
+
+    public void removeCharacters(ArrayList<Character> usedChars) {
+        usedChars.forEach(this::removeCharacter);
+    }
+
+    public void removeCharacter(Character usedChar) {
+        for (int i = 0; i < characters.size(); i++) {
+            if (characters.get(i).equals(usedChar)) {
+                characters.remove(i);
+                break;
+            }
+        }
+    }
 }

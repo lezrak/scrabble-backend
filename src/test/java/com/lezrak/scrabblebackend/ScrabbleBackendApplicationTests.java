@@ -2,6 +2,7 @@ package com.lezrak.scrabblebackend;
 
 import com.lezrak.scrabblebackend.game.GameController;
 import com.lezrak.scrabblebackend.game.GameDTO;
+import com.lezrak.scrabblebackend.game.PlayerState;
 import com.lezrak.scrabblebackend.gameName.GameNameService;
 import com.lezrak.scrabblebackend.player.PlayerController;
 import com.lezrak.scrabblebackend.player.PlayerDTO;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.MessagingException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -51,6 +53,25 @@ public class ScrabbleBackendApplicationTests {
     // Due to those circumstances I decided to implement tests this way, which I see as the least time consuming while
     // at the same time giving giving reasons to assume the basic functions are working.
 
+
+    @Test
+    public void developmentTest() {
+        HashMap<String, Character> move = new HashMap<>();
+        move.put("H1", 'T');
+        move.put("H2", 'O');
+        move.put("H3", 'J');
+        move.put("H4", 'E');
+        move.put("H5", 'S');
+        move.put("H6", 'T');
+        move.put("H7", 'S');
+        move.put("H8", 'T');
+        move.put("B5", 'R');
+        move.put("B6", 'I');
+        move.put("B7", 'N');
+        move.put("B8", 'G');
+        System.out.println(move.toString());
+    }
+
     @Test
     public void playerControllerIntegrationTest() throws MessagingException {
 
@@ -66,6 +87,40 @@ public class ScrabbleBackendApplicationTests {
         Assert.assertEquals(0, playerController.getGames(persistedPlayer.getId()).size());
     }
 
+    @Test
+    public void playerStateTest() {
+
+        PlayerState playerState = new PlayerState();
+        Assert.assertEquals(0,playerState.getCharacters().size());
+
+        ArrayList<Character> addedChars = new ArrayList<>();
+        addedChars.add('A');
+        addedChars.add('B');
+        addedChars.add('B');
+        addedChars.add('B');
+        addedChars.add('C');
+        addedChars.add('D');
+        addedChars.add('D');
+        Assert.assertEquals(7,addedChars.size());
+
+        playerState.addCharacters(addedChars);
+        Assert.assertEquals(7,playerState.getCharacters().size());
+
+        addedChars = new ArrayList<>();
+        addedChars.add('D');
+        Assert.assertEquals(1,addedChars.size());
+
+        playerState.removeCharacters(addedChars);
+        Assert.assertEquals(6,playerState.getCharacters().size());
+
+
+        addedChars = new ArrayList<>();
+        addedChars.add('B');
+        addedChars.add('B');
+        Assert.assertEquals(2,addedChars.size());
+        playerState.removeCharacters(addedChars);
+        Assert.assertEquals(4,playerState.getCharacters().size());
+    }
 
     @Test
     public void gameControllerIntegrationTest() throws MessagingException {
