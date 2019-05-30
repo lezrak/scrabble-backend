@@ -18,7 +18,7 @@ public class CorsFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        response.setHeader("Access-Control-Allow-Origin", "http://192.168.1.3/");
+        response.setHeader("Access-Control-Allow-Origin", "https://3hdw.github.io/zpi-frontend");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with, authorization, Content-Type");
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
