@@ -57,14 +57,14 @@ public class Game extends BaseEntity {
                 .queryParam("size", players.size() * 7);
 
         RestTemplate restTemplate = new RestTemplate();
-        String letters = restTemplate.getForObject(builder.toUriString(), String.class);
+        ResultWrapper letters = restTemplate.getForObject(builder.toUriString(), ResultWrapper.class);
         System.out.println("Letters received from AI server:");
         System.out.println(letters);
 
         int a = 0;
         for (PlayerState p : players) {
             assert letters != null;
-            p.addCharacters((ArrayList) Arrays.asList(letters.substring(a, a + 7).toCharArray()));
+            p.addCharacters((ArrayList) Arrays.asList(letters.getResult().substring(a, a + 7).toCharArray()));
             a += 7;
         }
     }
