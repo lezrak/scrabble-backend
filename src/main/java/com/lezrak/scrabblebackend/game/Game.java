@@ -57,14 +57,14 @@ public class Game extends BaseEntity {
                 .queryParam("size", players.size() * 7);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResultWrapper letters = restTemplate.getForObject(builder.toUriString(), ResultWrapper.class);
+        LettersWrapper letters = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
         System.out.println("Letters received from AI server:");
-        System.out.println(letters);
+        System.out.println(letters.getCharResult());
 
         int a = 0;
         for (PlayerState p : players) {
             assert letters != null;
-            p.addCharacters((ArrayList) Arrays.asList(letters.getResult().substring(a, a + 7).toCharArray()));
+            p.addCharacters(new ArrayList<>(letters.getCharResult().subList(a, a+7)));
             a += 7;
         }
     }
@@ -84,10 +84,10 @@ public class Game extends BaseEntity {
                 .queryParam("size", i);
 
         RestTemplate restTemplate = new RestTemplate();
-        String letters = restTemplate.getForObject(builder.toUriString(), String.class);
-        players.get(nextPlayer).addCharacters((ArrayList) Arrays.asList(letters.toCharArray()));
+        LettersWrapper lettersWrapper = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
+        players.get(nextPlayer).addCharacters(lettersWrapper.getCharResult());
         System.out.println("Letters received from AI server:");
-        System.out.println(letters);
+        System.out.println(lettersWrapper.getCharResult());
 
     }
 
