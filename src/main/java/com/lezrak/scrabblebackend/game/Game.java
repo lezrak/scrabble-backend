@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.persistence.*;
 import java.util.*;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 @Entity
 @Table(name = "games")
 public class Game extends BaseEntity {
@@ -110,7 +110,7 @@ public class Game extends BaseEntity {
         System.out.println(pointsAsString);
         int points;
         if (pointsAsString != null) {
-            points = Integer.parseInt(pointsAsString);
+            points = Integer.parseInt(pointsAsString.replaceAll("[^0-9.]", ""));
         } else {
             throw new RuntimeException("AI eval error");
         }
@@ -146,6 +146,7 @@ public class Game extends BaseEntity {
     }
 
     public LinkedHashSet<PlayerState> getPlayers() {
+        players.sort(PlayerState::compareTo);
         return new LinkedHashSet<>(players);
     }
 

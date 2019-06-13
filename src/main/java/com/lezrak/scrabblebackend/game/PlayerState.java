@@ -3,14 +3,16 @@ package com.lezrak.scrabblebackend.game;
 import com.lezrak.scrabblebackend.common.BaseEntity;
 import com.lezrak.scrabblebackend.player.Player;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 
 @Entity
 public class PlayerState extends BaseEntity implements Comparable<PlayerState>{
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Player player;
 
     private int totalPoints = 0;
@@ -24,7 +26,6 @@ public class PlayerState extends BaseEntity implements Comparable<PlayerState>{
 
     PlayerState(Player player) {
         this.player = player;
-
     }
 
     @Override

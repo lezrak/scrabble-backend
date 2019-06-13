@@ -10,6 +10,7 @@ import com.lezrak.scrabblebackend.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,16 +43,19 @@ public class GameServiceImpl implements GameService {
 
 
     @Override
+    @Transactional
     public GameDTO createGame(Long playerId) {
         identityCheck(playerId);
         if (!playerRepository.existsPlayerById(playerId)) throw new PlayerNotFoundException(playerId.toString());
         Game game = new Game(gameNameService.generateName());
+        playerRepository.save(playerRepository.findPlayerById(playerId).addGame(game));
         game.addPlayer(playerRepository.findPlayerById(playerId));
         return GameMapper.toGameDTO(gameRepository.save(game));
     }
 
 
     @Override
+    @Transactional
     public GameDTO addPlayer(Long playerId, String gameName) {
         identityCheck(playerId);
         validate(playerId, gameName);
@@ -62,6 +66,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    @Transactional
     public void removePlayer(Long playerId, String gameName) {
         identityCheck(playerId);
         validate(playerId, gameName);
@@ -77,6 +82,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    @Transactional
     public GameDTO makeMove(String gameName, Long playerId, HashMap<String, Character> move) {
         identityCheck(playerId);
         validate(playerId, gameName);
@@ -86,6 +92,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    @Transactional
     public GameDTO startGame(String gameName) {
         Game game = gameRepository.findByName(gameName);
         if (game == null) throw new GameNotFoundException(gameName);
