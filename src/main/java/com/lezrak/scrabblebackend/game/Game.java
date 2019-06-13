@@ -109,8 +109,8 @@ public class Game extends BaseEntity {
                 .queryParam("move", move.toString());
 
         RestTemplate restTemplate = new RestTemplate();
-        String pointsAsString = restTemplate.getForObject(builder.toUriString(), String.class);
-        System.out.println(pointsAsString);
+        PointsWrapper pointsWrapper = restTemplate.getForObject(builder.toUriString(), PointsWrapper.class);
+        String pointsAsString = pointsWrapper.pointsAsString();
         int points;
         if (pointsAsString != null) {
             points = Integer.parseInt(pointsAsString.replaceAll("[^0-9.]", ""));
@@ -165,5 +165,7 @@ public class Game extends BaseEntity {
         return name;
     }
 
-
+    public boolean isStarted() {
+        return started;
+    }
 }
