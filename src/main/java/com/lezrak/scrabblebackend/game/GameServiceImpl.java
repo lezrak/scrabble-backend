@@ -1,5 +1,7 @@
 package com.lezrak.scrabblebackend.game;
 
+import com.lezrak.scrabblebackend.common.SocketMessage;
+import com.lezrak.scrabblebackend.common.WebSocketController;
 import com.lezrak.scrabblebackend.exception.GameNotFoundException;
 import com.lezrak.scrabblebackend.exception.IdentityMismatchException;
 import com.lezrak.scrabblebackend.exception.PlayerNotFoundException;
@@ -22,12 +24,15 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     private PlayerRepository playerRepository;
     private GameNameService gameNameService;
+    private WebSocketController webSocketController;
+
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository, GameNameService gameNameService) {
+    public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository, GameNameService gameNameService, WebSocketController webSocketController) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.gameNameService = gameNameService;
+        this.webSocketController=webSocketController;
     }
 
     @Override
@@ -62,6 +67,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findByName(gameName);
         game.addPlayer(playerRepository.findPlayerById(playerId));
         playerRepository.save(playerRepository.findPlayerById(playerId).addGame(game));
+        webSocketController.pokeLobby(gameName, new SocketMessage("CHANGE"));
         return GameMapper.toGameDTO(gameRepository.save(game));
     }
 
@@ -78,7 +84,26 @@ public class GameServiceImpl implements GameService {
                 .contains(playerRepository.findPlayerById(playerId))) {
             playerRepository.save(playerRepository.findPlayerById(playerId).removeGame(gameRepository.findByName(gameName)));
             gameRepository.save(gameRepository.findByName(gameName).removePlayer(playerRepository.findPlayerById(playerId)));
+            webSocketController.pokeLobby(gameName, new SocketMessage("CHANGE"));
         } else throw new PlayerNotInGameException(playerId.toString(), gameName);
+    }
+
+    public void securedRemovePlayer(Long playerId, String gameName) {
+        Game game = gameRepository.findByName(gameName);
+        if(!game.isStarted()){
+            validate(playerId, gameName);
+            if (game
+                    .getPlayers()
+                    .stream()
+                    .map(PlayerState::getPlayer)
+                    .collect(Collectors.toSet())
+                    .contains(playerRepository.findPlayerById(playerId))) {
+                playerRepository.save(playerRepository.findPlayerById(playerId).removeGame(gameRepository.findByName(gameName)));
+                gameRepository.save(gameRepository.findByName(gameName).removePlayer(playerRepository.findPlayerById(playerId)));
+                if(gameRepository.findByName(gameName).getPlayers().size()==0) gameRepository.delete(gameRepository.findByName(gameName));
+                webSocketController.pokeLobby(gameName, new SocketMessage("CHANGE"));
+            } else throw new PlayerNotInGameException(playerId.toString(), gameName);
+        }
     }
 
     @Override
@@ -88,7 +113,9 @@ public class GameServiceImpl implements GameService {
         validate(playerId, gameName);
         Game game = gameRepository.findByName(gameName);
         game.makeMove(playerId, move);
-        return GameMapper.toGameDTO(gameRepository.save(game));
+        GameDTO gameDTO = GameMapper.toGameDTO(gameRepository.save(game));
+        webSocketController.updateGame(gameName, new SocketMessage("hed",gameDTO));
+        return gameDTO;
     }
 
     @Override
@@ -97,7 +124,9 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findByName(gameName);
         if (game == null) throw new GameNotFoundException(gameName);
         game.startGame();
-        return GameMapper.toGameDTO(gameRepository.save(game));
+        GameDTO startedGame = GameMapper.toGameDTO(gameRepository.save(game));
+        webSocketController.pokeLobby(gameName, new SocketMessage("START", startedGame));
+        return startedGame;
     }
 
     private void validate(Long playerId, String gameName) {
