@@ -2,6 +2,7 @@ package com.lezrak.scrabblebackend.game;
 
 import com.lezrak.scrabblebackend.common.BaseEntity;
 import com.lezrak.scrabblebackend.player.Player;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -53,6 +54,7 @@ public class PlayerState extends BaseEntity implements Comparable<PlayerState>{
         return characters;
     }
 
+    @Transactional
     public void addCharacters(ArrayList<Character> newChars) {
         characters.addAll(newChars);
     }

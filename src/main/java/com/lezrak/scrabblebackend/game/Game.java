@@ -7,6 +7,7 @@ import com.lezrak.scrabblebackend.exception.GameFullException;
 import com.lezrak.scrabblebackend.exception.NotYourTurnException;
 import com.lezrak.scrabblebackend.exception.PlayerNotInGameException;
 import com.lezrak.scrabblebackend.player.Player;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -38,6 +39,7 @@ public class Game extends BaseEntity {
         this.name = name;
     }
 
+    @Transactional
     public void startGame() {
         if (started) {
             throw new GameAlreadyStartedException(name);
@@ -48,7 +50,8 @@ public class Game extends BaseEntity {
         }
     }
 
-    private void getLettersForStart() {
+    @Transactional
+    public void getLettersForStart() {
         String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
 
         UriComponentsBuilder builder = UriComponentsBuilder

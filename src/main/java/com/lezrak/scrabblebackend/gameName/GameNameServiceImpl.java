@@ -33,6 +33,9 @@ public class GameNameServiceImpl implements GameNameService {
         Random random = new Random();
         // there is 2965277 words allowed in polish version of scrabble, all saved in gameNameRepository
         String name = gameNameRepository.findGameNameById(random.nextInt(2965277)).getName();
+        if (name == null) {
+            name = "loadingInProgress";
+        }
         while (gameRepository.findByName(name) != null) {
             name += random.nextInt(10);
         }

@@ -23,36 +23,6 @@ public class GameController {
         return gameService.findAllByStartedFalse();
     }
 
-    @GetMapping("/testAI")
-    public String testAI() {
-        HashMap<String, Character> move = new HashMap<>();
-        move.put("H8", 'T');
-        move.put("H9", 'O');
-        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/evaluate";
-
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(transactionUrl)
-                .queryParam("board", new HashMap<>())
-                .queryParam("move", move.toString());
-
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(builder.toUriString(), String.class);
-    }
-
-    @GetMapping("/testLetters")
-    public String testLetters() {
-        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
-
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(transactionUrl)
-                .queryParam("used", "")
-                .queryParam("size", 7);
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        return restTemplate.getForObject(builder.toUriString(), String.class);
-    }
-
     @GetMapping("/{gameName}")
     public GameDTO findByName(@PathVariable String gameName) {
         return gameService.findByName(gameName);
@@ -83,6 +53,36 @@ public class GameController {
     @PatchMapping("/{gameName}/removePlayer")
     public void removePlayer(@RequestParam Long playerId, @PathVariable String gameName) {
         gameService.removePlayer(playerId, gameName);
+    }
+
+    @GetMapping("/testAI")
+    public String testAI() {
+        HashMap<String, Character> move = new HashMap<>();
+        move.put("H8", 'T');
+        move.put("H9", 'O');
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/evaluate";
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(transactionUrl)
+                .queryParam("board", new HashMap<>())
+                .queryParam("move", move.toString());
+
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(builder.toUriString(), String.class);
+    }
+
+    @GetMapping("/testLetters")
+    public String testLetters() {
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(transactionUrl)
+                .queryParam("used", "")
+                .queryParam("size", 7);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        return restTemplate.getForObject(builder.toUriString(), String.class);
     }
 
 }
