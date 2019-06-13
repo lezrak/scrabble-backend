@@ -36,7 +36,7 @@ public class GameController {
     @PatchMapping("/{gameName}/move")
     public GameDTO makeMove(@PathVariable String gameName,
                             @RequestBody HashMap<String, Character> move,
-                            @RequestBody Long playerId) {
+                            @RequestParam Long playerId) {
         return gameService.makeMove(gameName, playerId, move);
     }
 
