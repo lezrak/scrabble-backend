@@ -66,24 +66,28 @@ public class Game extends BaseEntity {
 
         int a = 0;
         for (PlayerState p : players) {
-            assert letters != null;
             p.addCharacters(new ArrayList<>(letters.getCharResult().subList(a, a+7)));
             a += 7;
         }
     }
 
+    @Transactional
     public void getLetters(int i) {
-        String used = "";
-        used += (boardState.values().toString());
+        ArrayList<Character> helper = new ArrayList<>(boardState.values());
         for (PlayerState playerState : players) {
-            used += playerState.getCharacters();
+            helper.addAll(playerState.getCharacters());
+        }
+
+        StringBuilder used = new StringBuilder();
+        for (Character c : helper) {
+            used.append(c);
         }
 
         String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
 
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(transactionUrl)
-                .queryParam("used", used)
+                .queryParam("used",used.toString())
                 .queryParam("size", i);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -119,6 +123,7 @@ public class Game extends BaseEntity {
         }
         if (points > 0) {
             move.values().forEach(players.get(nextPlayer)::removeCharacter);
+            boardState.putAll(move);
             getLetters(move.size());
         }
         for (PlayerState p : players) {

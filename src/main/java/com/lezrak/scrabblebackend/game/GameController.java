@@ -77,7 +77,7 @@ public class GameController {
 
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(transactionUrl)
-                .queryParam("used", "")
+                .queryParam("used", "ĄAAAĆAAAĘAAAŁAAAŃAAAÓAAAŚAAAŹAAAŻ")
                 .queryParam("size", 7);
 
         RestTemplate restTemplate = new RestTemplate();
