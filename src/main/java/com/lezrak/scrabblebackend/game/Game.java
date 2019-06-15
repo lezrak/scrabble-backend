@@ -54,13 +54,14 @@ public class Game extends BaseEntity {
     public void getLettersForStart() {
         String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
 
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(transactionUrl)
-                .queryParam("used", "")
-                .queryParam("size", players.size() * 7);
+//        UriComponentsBuilder builder = UriComponentsBuilder
+//                .fromUriString(transactionUrl)
+//                .queryParam("used", "")
+//                .queryParam("size", players.size() * 7);
 
         RestTemplate restTemplate = new RestTemplate();
-        LettersWrapper letters = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
+//        LettersWrapper letters = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
+        LettersWrapper letters = restTemplate.postForObject(transactionUrl,new GetLettersRequest(players.size()*7), LettersWrapper.class);
         System.out.println("Letters received from AI server:");
         System.out.println(letters.getCharResult());
 
@@ -78,20 +79,21 @@ public class Game extends BaseEntity {
             helper.addAll(playerState.getCharacters());
         }
 
-        StringBuilder used = new StringBuilder();
-        for (Character c : helper) {
-            used.append(c);
-        }
+//        StringBuilder used = new StringBuilder();
+//        for (Character c : helper) {
+//            used.append(c);
+//        }
 
         String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/util/drawTiles";
 
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(transactionUrl)
-                .queryParam("used",used.toString())
-                .queryParam("size", i);
+//        UriComponentsBuilder builder = UriComponentsBuilder
+//                .fromUriString(transactionUrl)
+//                .queryParam("used",used.toString())
+//                .queryParam("size", i);
 
         RestTemplate restTemplate = new RestTemplate();
-        LettersWrapper lettersWrapper = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
+        LettersWrapper lettersWrapper = restTemplate.postForObject(transactionUrl, new GetLettersRequest(helper,i), LettersWrapper.class);
+//        LettersWrapper lettersWrapper = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
         players.get(nextPlayer).addCharacters(lettersWrapper.getCharResult());
         System.out.println("Letters received from AI server:");
         System.out.println(lettersWrapper.getCharResult());
@@ -107,13 +109,14 @@ public class Game extends BaseEntity {
 
         String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/evaluate";
 
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(transactionUrl)
-                .queryParam("board", this.boardState.toString())
-                .queryParam("move", move.toString());
+//        UriComponentsBuilder builder = UriComponentsBuilder
+//                .fromUriString(transactionUrl)
+//                .queryParam("board", this.boardState.toString())
+//                .queryParam("move", move.toString());
 
         RestTemplate restTemplate = new RestTemplate();
-        PointsWrapper pointsWrapper = restTemplate.getForObject(builder.toUriString(), PointsWrapper.class);
+        PointsWrapper pointsWrapper = restTemplate.postForObject(transactionUrl, new EvaluateRequest(move,boardState),PointsWrapper.class);
+//        PointsWrapper pointsWrapper = restTemplate.getForObject(builder.toUriString(), PointsWrapper.class);
         String pointsAsString = pointsWrapper.pointsAsString();
         int points;
         if (pointsAsString != null) {
