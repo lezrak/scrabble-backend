@@ -118,10 +118,10 @@ public class Game extends BaseEntity {
         PointsWrapper pointsWrapper = restTemplate.postForObject(transactionUrl, new EvaluateRequest(move,boardState),PointsWrapper.class);
 //        PointsWrapper pointsWrapper = restTemplate.getForObject(builder.toUriString(), PointsWrapper.class);
         String pointsAsString = pointsWrapper.pointsAsString();
-        int points;
+        int points=0;
         if (pointsAsString != null) {
             points = Integer.parseInt(pointsAsString.replaceAll("[^0-9.]", ""));
-        } else {
+        } else if(points <= 0) {
             throw new RuntimeException("AI eval error");
         }
         if (points > 0) {
