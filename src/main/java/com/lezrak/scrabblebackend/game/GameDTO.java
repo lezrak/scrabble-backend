@@ -14,16 +14,19 @@ public class GameDTO {
 
     private int nextPlayer = -1;
 
+    private String nextPlayerName = "";
+
     private String name;
 
     public GameDTO() {
     }
 
-    GameDTO(LinkedHashSet<PlayerStateDTO> players, HashMap<String, Character> boardState, int nextPlayer, String name) {
+    GameDTO(LinkedHashSet<PlayerStateDTO> players, HashMap<String, Character> boardState, int nextPlayer, String name, String nextPlayerName) {
         this.players = players;
         this.boardState = boardState;
         this.nextPlayer = nextPlayer;
         this.name = name;
+        this.nextPlayerName = nextPlayerName;
     }
 
     @Override
@@ -54,6 +57,10 @@ public class GameDTO {
 
     public String getName() {
         return name;
+    }
+
+    public String getNextPlayerName() {
+        return nextPlayerName;
     }
 
     public static class PlayerStateDTO {

@@ -9,7 +9,6 @@ import com.lezrak.scrabblebackend.exception.PlayerNotInGameException;
 import com.lezrak.scrabblebackend.player.Player;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.*;
 import java.util.*;
@@ -168,6 +167,10 @@ public class Game extends BaseEntity {
 
     public int getNextPlayer() {
         return nextPlayer;
+    }
+
+    public String getNextPlayerName(){
+        return players.get(nextPlayer).getPlayer().getNickname();
     }
 
     public String getName() {

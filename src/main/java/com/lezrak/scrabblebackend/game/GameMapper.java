@@ -9,7 +9,7 @@ public class GameMapper {
     public static GameDTO toGameDTO(Game game) {
 
         return new GameDTO(PlayerStateMapper.toPlayerStateDTO(game.getPlayers()),
-                game.getBoardState(), game.getNextPlayer(), game.getName());
+                game.getBoardState(), game.getNextPlayer(), game.getName(),game.getNextPlayerName());
     }
 
     public static List<GameDTO> toGameDTO(List<Game> gameList) {
