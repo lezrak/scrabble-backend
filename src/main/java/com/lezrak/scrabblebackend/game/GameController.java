@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,6 +41,18 @@ public class GameController {
         return gameService.makeMove(gameName, playerId, move);
     }
 
+    @PatchMapping("/{gameName}/tradeLetters")
+    public GameDTO tradeLetters(@PathVariable String gameName,
+                                @RequestBody ArrayList<Character> characters,
+                                @RequestParam Long playerId) {
+        return gameService.tradeLetters(gameName, playerId, characters);
+    }
+
+    @GetMapping("/{gameName}/hint")
+    public String getHint(@PathVariable String gameName) {
+        return gameService.getHint(gameName);
+    }
+
     @PatchMapping("/{gameName}/start")
     public GameDTO startGame(@PathVariable String gameName) {
         return gameService.startGame(gameName);
@@ -48,6 +61,11 @@ public class GameController {
     @PatchMapping("/{gameName}/addPlayer")
     public GameDTO addPlayer(@RequestParam Long playerId, @PathVariable String gameName) {
         return gameService.addPlayer(playerId, gameName);
+    }
+
+    @PatchMapping("/{gameName}/addAI")
+    public GameDTO addPlayer(@PathVariable String gameName) {
+        return gameService.addAI( gameName);
     }
 
     @PatchMapping("/{gameName}/removePlayer")

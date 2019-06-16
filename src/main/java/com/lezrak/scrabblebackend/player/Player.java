@@ -21,10 +21,16 @@ public class Player extends BaseEntity implements UserDetails {
     private String nickname = "";
     private String password = "";
     private boolean isEnabled = false;
+    private boolean isAI = false;
     private HashSet<String> games = new HashSet<>();
 
 
     public Player(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public Player(String nickname, boolean isAI) {
+        this.isAI = isAI;
         this.nickname = nickname;
     }
 
@@ -69,6 +75,9 @@ public class Player extends BaseEntity implements UserDetails {
         return nickname;
     }
 
+    public boolean isAI() {
+        return isAI;
+    }
 
     public String getPassword() {
         return password;

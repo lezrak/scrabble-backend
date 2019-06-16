@@ -46,6 +46,7 @@ public class Game extends BaseEntity {
             started = true;
             getLettersForStart();
             nextPlayer = new Random().nextInt(players.size());
+            checkForAIMove();
         }
     }
 
@@ -60,13 +61,13 @@ public class Game extends BaseEntity {
 
         RestTemplate restTemplate = new RestTemplate();
 //        LettersWrapper letters = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
-        LettersWrapper letters = restTemplate.postForObject(transactionUrl,new GetLettersRequest(players.size()*7), LettersWrapper.class);
+        LettersWrapper letters = restTemplate.postForObject(transactionUrl, new GetLettersRequest(players.size() * 7), LettersWrapper.class);
         System.out.println("Letters received from AI server:");
         System.out.println(letters.getCharResult());
 
         int a = 0;
         for (PlayerState p : players) {
-            p.addCharacters(new ArrayList<>(letters.getCharResult().subList(a, a+7)));
+            p.addCharacters(new ArrayList<>(letters.getCharResult().subList(a, a + 7)));
             a += 7;
         }
     }
@@ -91,7 +92,7 @@ public class Game extends BaseEntity {
 //                .queryParam("size", i);
 
         RestTemplate restTemplate = new RestTemplate();
-        LettersWrapper lettersWrapper = restTemplate.postForObject(transactionUrl, new GetLettersRequest(helper,i), LettersWrapper.class);
+        LettersWrapper lettersWrapper = restTemplate.postForObject(transactionUrl, new GetLettersRequest(helper, i), LettersWrapper.class);
 //        LettersWrapper lettersWrapper = restTemplate.getForObject(builder.toUriString(), LettersWrapper.class);
         players.get(nextPlayer).addCharacters(lettersWrapper.getCharResult());
         System.out.println("Letters received from AI server:");
@@ -114,14 +115,14 @@ public class Game extends BaseEntity {
 //                .queryParam("move", move.toString());
 
         RestTemplate restTemplate = new RestTemplate();
-        PointsWrapper pointsWrapper = restTemplate.postForObject(transactionUrl, new EvaluateRequest(move,boardState),PointsWrapper.class);
+        PointsWrapper pointsWrapper = restTemplate.postForObject(transactionUrl, new EvaluateRequest(move, boardState), PointsWrapper.class);
 //        PointsWrapper pointsWrapper = restTemplate.getForObject(builder.toUriString(), PointsWrapper.class);
         String pointsAsString = pointsWrapper.pointsAsString();
-        int points=0;
+        int points = 0;
         if (pointsAsString != null) {
             points = Integer.parseInt(pointsAsString.replaceAll("[^0-9.]", ""));
         }
-        if(points <= 0) {
+        if (points < 0) {
             throw new RuntimeException("AI eval error");
         }
         if (points > 0) {
@@ -135,6 +136,48 @@ public class Game extends BaseEntity {
             }
         }
         nextPlayer = (nextPlayer + 1) % players.size();
+        checkForAIMove();
+    }
+
+    private void checkForAIMove() {
+        if (players.get(nextPlayer).getPlayer().isAI()) {
+            makeAIMove();
+        }
+    }
+
+    private void makeAIMove() {
+        //todo get AI move prediction from AI server
+
+        //todo get AI move eval from AI serer
+
+        //todo copy logic from makeMove to adjust boardState and AI points
+
+        checkForAIMove();
+    }
+
+    public String getHint() {
+        ArrayList<Character> characters = players.get(nextPlayer).getCharacters();
+
+        //todo get hint form AI server using characters and gameState
+
+
+        return "uzyskana podpowiedź";
+    }
+
+    public void tradeLetters(Long playerId, ArrayList<Character> characters) {
+        players.sort(PlayerState::compareTo);
+        if (!players.get(nextPlayer).getPlayer().getId().equals(playerId)) {
+            throw new NotYourTurnException();
+        }
+        characters.forEach(players.get(nextPlayer)::removeCharacter);
+        getLetters(characters.size());
+        for (PlayerState p : players) {
+            if (p.getPlayer().getId().equals(playerId)) {
+                p.addPoints(0);
+            }
+        }
+        nextPlayer = (nextPlayer + 1) % players.size();
+        checkForAIMove();
     }
 
 
@@ -169,7 +212,7 @@ public class Game extends BaseEntity {
         return nextPlayer;
     }
 
-    public String getNextPlayerName(){
+    public String getNextPlayerName() {
         if (nextPlayer < 0) {
             return "Game not started yet.";
         } else {

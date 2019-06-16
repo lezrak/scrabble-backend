@@ -1,5 +1,6 @@
 package com.lezrak.scrabblebackend.game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,8 @@ public interface GameService {
 
     GameDTO makeMove(String gameName, Long playerId, HashMap<String, Character> move);
 
+    GameDTO tradeLetters(String gameName, Long playerId, ArrayList<Character> characters);
+
     GameDTO startGame(String gameName);
 
     GameDTO findByName(String gameName);
@@ -16,6 +19,10 @@ public interface GameService {
     GameDTO createGame(Long playerId);
 
     GameDTO addPlayer(Long playerId, String gameName);
+
+    GameDTO addAI(String gameName);
+
+    String getHint(String gameName);
 
     void removePlayer(Long playerId, String gameName);
 }

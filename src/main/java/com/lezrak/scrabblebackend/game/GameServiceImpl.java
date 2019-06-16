@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.java2d.windows.GDIBlitLoops;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +34,7 @@ public class GameServiceImpl implements GameService {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.gameNameService = gameNameService;
-        this.webSocketController=webSocketController;
+        this.webSocketController = webSocketController;
     }
 
     @Override
@@ -73,6 +75,17 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
+    public GameDTO addAI(String gameName) {
+        Game game = gameRepository.findByName(gameName);
+        Player ai = new Player("AI " + game.getPlayers().size() +" "+ gameName,true);
+        game.addPlayer(ai);
+        playerRepository.save(ai.addGame(game));
+        webSocketController.pokeLobby(gameName, new SocketMessage("CHANGE"));
+        return GameMapper.toGameDTO(gameRepository.save(game));
+    }
+
+    @Override
+    @Transactional
     public void removePlayer(Long playerId, String gameName) {
         identityCheck(playerId);
         validate(playerId, gameName);
@@ -90,7 +103,7 @@ public class GameServiceImpl implements GameService {
 
     public void securedRemovePlayer(Long playerId, String gameName) {
         Game game = gameRepository.findByName(gameName);
-        if(!game.isStarted()){
+        if (!game.isStarted()) {
             validate(playerId, gameName);
             if (game
                     .getPlayers()
@@ -100,10 +113,28 @@ public class GameServiceImpl implements GameService {
                     .contains(playerRepository.findPlayerById(playerId))) {
                 playerRepository.save(playerRepository.findPlayerById(playerId).removeGame(gameRepository.findByName(gameName)));
                 gameRepository.save(gameRepository.findByName(gameName).removePlayer(playerRepository.findPlayerById(playerId)));
-                if(gameRepository.findByName(gameName).getPlayers().size()==0) gameRepository.delete(gameRepository.findByName(gameName));
+                if (gameRepository.findByName(gameName).getPlayers().size() == 0)
+                    gameRepository.delete(gameRepository.findByName(gameName));
                 webSocketController.pokeLobby(gameName, new SocketMessage("CHANGE"));
             } else throw new PlayerNotInGameException(playerId.toString(), gameName);
         }
+    }
+
+    @Override
+    public String getHint(String gameName) {
+        //todo should we do something with websocket here?
+        return gameRepository.findByName(gameName).getHint();
+    }
+
+    @Override
+    public GameDTO tradeLetters(String gameName, Long playerId, ArrayList<Character> characters) {
+        identityCheck(playerId);
+        validate(playerId, gameName);
+        Game game = gameRepository.findByName(gameName);
+        game.tradeLetters(playerId, characters);
+        GameDTO gameDTO = GameMapper.toGameDTO(gameRepository.save(game));
+        webSocketController.updateGame(gameName, new SocketMessage("hed", gameDTO));
+        return gameDTO;
     }
 
     @Override
@@ -114,7 +145,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findByName(gameName);
         game.makeMove(playerId, move);
         GameDTO gameDTO = GameMapper.toGameDTO(gameRepository.save(game));
-        webSocketController.updateGame(gameName, new SocketMessage("hed",gameDTO));
+        webSocketController.updateGame(gameName, new SocketMessage("hed", gameDTO));
         return gameDTO;
     }
 
