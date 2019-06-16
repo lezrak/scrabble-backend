@@ -170,7 +170,11 @@ public class Game extends BaseEntity {
     }
 
     public String getNextPlayerName(){
-        return players.get(nextPlayer).getPlayer().getNickname();
+        if (nextPlayer < 0) {
+            return "Game not started yet.";
+        } else {
+            return players.get(nextPlayer).getPlayer().getNickname();
+        }
     }
 
     public String getName() {
