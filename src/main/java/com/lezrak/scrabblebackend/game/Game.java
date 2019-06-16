@@ -146,22 +146,34 @@ public class Game extends BaseEntity {
     }
 
     private void makeAIMove() {
-        //todo get AI move prediction from AI server
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/ai_move";
+        RestTemplate restTemplate = new RestTemplate();
+        ArrayList<Character> aiLetters = players.get(nextPlayer).getCharacters();
+        GetAiMoveResult aiMoveResult = restTemplate.postForObject(transactionUrl, new GetAiMoveRequest(aiLetters, boardState), GetAiMoveResult.class);
 
-        //todo get AI move eval from AI serer
+        int points = aiMoveResult.getScore();
+        if (points < 0) {
+            throw new RuntimeException("AI eval error");
+        }
+        if (points > 0) {
+            aiMoveResult.getMove().values().forEach(players.get(nextPlayer)::removeCharacter);
+            boardState.putAll(aiMoveResult.getMove());
+            getLetters(aiMoveResult.getMove().size());
+        }
 
-        //todo copy logic from makeMove to adjust boardState and AI points
+        players.get(nextPlayer).addPoints(points);
+
+        nextPlayer = (nextPlayer + 1) % players.size();
 
         checkForAIMove();
     }
 
     public String getHint() {
         ArrayList<Character> characters = players.get(nextPlayer).getCharacters();
-
-        //todo get hint form AI server using characters and gameState
-
-
-        return "uzyskana podpowiedź";
+        String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/ai_move";
+        RestTemplate restTemplate = new RestTemplate();
+        GetAiMoveResult hint = restTemplate.postForObject(transactionUrl, new GetAiMoveRequest(characters, boardState), GetAiMoveResult.class);
+        return "hint.getMove().toString()";
     }
 
     public void tradeLetters(Long playerId, ArrayList<Character> characters) {
