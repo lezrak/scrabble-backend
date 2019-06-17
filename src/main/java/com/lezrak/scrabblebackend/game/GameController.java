@@ -45,11 +45,12 @@ public class GameController {
     public GameDTO tradeLetters(@PathVariable String gameName,
                                 @RequestBody ArrayList<Character> characters,
                                 @RequestParam Long playerId) {
+        System.out.println("@@@@@@@ HIT");
         return gameService.tradeLetters(gameName, playerId, characters);
     }
 
     @GetMapping("/{gameName}/hint")
-    public String getHint(@PathVariable String gameName) {
+    public HashMap<String, Character> getHint(@PathVariable String gameName) {
         return gameService.getHint(gameName);
     }
 

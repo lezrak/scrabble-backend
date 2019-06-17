@@ -121,8 +121,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public String getHint(String gameName) {
-        //todo should we do something with websocket here?
+    public HashMap<String, Character> getHint(String gameName) {
         return gameRepository.findByName(gameName).getHint();
     }
 

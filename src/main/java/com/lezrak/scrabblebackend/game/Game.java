@@ -168,12 +168,12 @@ public class Game extends BaseEntity {
         checkForAIMove();
     }
 
-    public String getHint() {
+    public HashMap<String, Character> getHint() {
         ArrayList<Character> characters = players.get(nextPlayer).getCharacters();
         String transactionUrl = "https://fierce-retreat-89489.herokuapp.com/eval/ai_move";
         RestTemplate restTemplate = new RestTemplate();
         GetAiMoveResult hint = restTemplate.postForObject(transactionUrl, new GetAiMoveRequest(characters, boardState), GetAiMoveResult.class);
-        return "hint.getMove().toString()";
+        return hint.getMove();
     }
 
     public void tradeLetters(Long playerId, ArrayList<Character> characters) {

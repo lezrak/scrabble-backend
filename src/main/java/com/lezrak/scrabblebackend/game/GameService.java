@@ -22,7 +22,7 @@ public interface GameService {
 
     GameDTO addAI(String gameName);
 
-    String getHint(String gameName);
+    HashMap<String, Character> getHint(String gameName);
 
     void removePlayer(Long playerId, String gameName);
 }
