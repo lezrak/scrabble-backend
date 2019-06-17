@@ -122,7 +122,7 @@ public class Game extends BaseEntity {
         if (pointsAsString != null) {
             points = Integer.parseInt(pointsAsString.replaceAll("[^0-9.]", ""));
         }
-        if (points < 0) {
+        if (points <= 0) {
             throw new RuntimeException("AI eval error");
         }
         if (points > 0) {
