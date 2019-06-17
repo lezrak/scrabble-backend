@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GetAiMoveRequest {
-    private ArrayList<Character> letters;
+    private ArrayList<Character> hand;
     private HashMap<String, Character> board;
 
-    public GetAiMoveRequest(ArrayList<Character> letters, HashMap<String, Character> board) {
-        this.letters = letters;
+    public GetAiMoveRequest(ArrayList<Character> hand, HashMap<String, Character> board) {
+        this.hand = hand;
         this.board = board;
     }
 
     public GetAiMoveRequest() {
     }
 
-    public ArrayList<Character> getLetters() {
-        return letters;
+    public ArrayList<Character> getHand() {
+        return hand;
     }
 
-    public void setLetters(ArrayList<Character> letters) {
-        this.letters = letters;
+    public void setHand(ArrayList<Character> hand) {
+        this.hand = hand;
     }
 
     public HashMap<String, Character> getBoard() {
